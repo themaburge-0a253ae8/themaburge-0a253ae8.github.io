@@ -1,0 +1,2416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>羞羞视频 - 影视点播与片单推荐</title>
+  <meta name="description" content="羞羞视频汇集热门影片、剧集与短片，提供分类筛选、深度解析、用户评论和片单推荐，适合喜欢影视点播与内容发现的影迷浏览。">
+  <meta name="keywords" content="羞羞视频">
+  <style>
+    :root {
+      --primary: #8b3a62;
+      --primary-light: #b25a84;
+      --primary-dark: #5e2342;
+      --bg: #faf7f9;
+      --surface: #ffffff;
+      --surface-alt: #f3edf1;
+      --text: #1f1a1e;
+      --text-secondary: #5e5159;
+      --text-tertiary: #8a7b83;
+      --border: #e4d9e0;
+      --radius-card: 12px;
+      --radius-btn: 8px;
+      --radius-tag: 4px;
+      --shadow: 0 2px 8px rgba(90, 40, 65, 0.08);
+      --shadow-hover: 0 6px 20px rgba(90, 40, 65, 0.14);
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans SC", sans-serif;
+      --header-height: 56px;
+      --announce-height: 36px;
+      --sticky-offset: calc(var(--announce-height) + var(--header-height));
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: var(--sticky-offset);
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    .container {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* 吸顶公告条 */
+    .announce-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--primary-dark);
+      color: #fff;
+      height: var(--announce-height);
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+      overflow: hidden;
+    }
+
+    .announce-bar .container {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .announce-brand {
+      font-weight: 700;
+      color: #f7d9e6;
+      flex-shrink: 0;
+    }
+
+    .announce-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .announce-item .date {
+      color: #e8b5cf;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .announce-item .tag {
+      background: rgba(255, 255, 255, 0.16);
+      padding: 1px 8px;
+      border-radius: 10px;
+      font-size: 12px;
+    }
+
+    /* 吸顶页头 */
+    .site-header {
+      position: sticky;
+      top: var(--announce-height);
+      z-index: 99;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      height: var(--header-height);
+    }
+
+    .site-header .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+    }
+
+    .brand-name {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      letter-spacing: 0.5px;
+    }
+
+    .main-nav {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .main-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .main-nav a {
+      padding: 6px 12px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      border-radius: var(--radius-btn);
+      white-space: nowrap;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .main-nav a:hover,
+    .main-nav a:focus-visible {
+      background: var(--surface-alt);
+      color: var(--primary);
+      outline: 2px solid var(--primary-light);
+      outline-offset: 1px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: var(--surface-alt);
+      border-radius: 20px;
+      padding: 0 12px;
+      height: 34px;
+      border: 1px solid transparent;
+      transition: border 0.2s;
+    }
+
+    .search-box:focus-within {
+      border-color: var(--primary-light);
+    }
+
+    .search-box input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 13px;
+      width: 140px;
+      color: var(--text);
+    }
+
+    .search-box input::placeholder {
+      color: var(--text-tertiary);
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-btn);
+      font-size: 20px;
+      color: var(--text);
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 首屏 */
+    .hero {
+      position: relative;
+      padding: 48px 0 40px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #f7e8ef 0%, #faf7f9 55%, #f0e2ea 100%);
+    }
+
+    .hero .container {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 48px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: var(--primary-dark);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .hero-desc {
+      font-size: 16px;
+      color: var(--text-secondary);
+      max-width: 540px;
+      margin-bottom: 24px;
+      line-height: 1.8;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--primary);
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: var(--radius-btn);
+      font-size: 14px;
+      font-weight: 600;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      color: var(--primary);
+      padding: 10px 22px;
+      border-radius: var(--radius-btn);
+      font-size: 14px;
+      font-weight: 600;
+      border: 1.5px solid var(--primary-light);
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .btn-outline:hover {
+      background: rgba(139, 58, 98, 0.06);
+      transform: translateY(-2px);
+    }
+
+    .hero-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .hero-svg {
+      width: 100%;
+      max-width: 360px;
+      height: auto;
+      filter: drop-shadow(0 12px 32px rgba(139, 58, 98, 0.18));
+    }
+
+    /* 主内容区布局：三栏门户 */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 180px 1fr 260px;
+      gap: 32px;
+      padding: 40px 0;
+      align-items: start;
+    }
+
+    .channel-sidebar {
+      position: sticky;
+      top: calc(var(--sticky-offset) + 16px);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .channel-sidebar h2 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 0 12px 8px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+
+    .channel-sidebar a {
+      padding: 8px 12px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      border-radius: var(--radius-btn);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .channel-sidebar a:hover,
+    .channel-sidebar a:focus-visible {
+      background: var(--surface-alt);
+      color: var(--primary);
+      outline: 2px solid var(--primary-light);
+      outline-offset: 1px;
+    }
+
+    /* 主内容区 */
+    .content-main {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+      min-width: 0;
+    }
+
+    .section {
+      scroll-margin-top: var(--sticky-offset);
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+
+    .section-sub {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      margin-bottom: 20px;
+    }
+
+    /* 概览 */
+    .overview-text {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.9;
+      background: var(--surface);
+      padding: 24px 28px;
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow);
+    }
+
+    .overview-text p + p {
+      margin-top: 12px;
+    }
+
+    /* 精选卡片网格 */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.25s, box-shadow 0.25s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .card-img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      background: var(--surface-alt);
+    }
+
+    .card-body {
+      padding: 14px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: var(--radius-tag);
+      background: var(--surface-alt);
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .tag-primary {
+      background: rgba(139, 58, 98, 0.1);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-tertiary);
+      border-top: 1px solid var(--border);
+      padding-top: 8px;
+      margin-top: auto;
+    }
+
+    .card-meta .score {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* 最新更新列表 */
+    .update-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      background: var(--surface);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .update-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+
+    .update-item:last-child {
+      border-bottom: none;
+    }
+
+    .update-item:hover {
+      background: var(--surface-alt);
+    }
+
+    .update-info {
+      min-width: 0;
+    }
+
+    .update-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .update-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .update-date {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* 分类入口 */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .category-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 16px;
+      background: var(--surface);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .category-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--primary-light);
+    }
+
+    .category-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    .category-count {
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+
+    /* 深度解析 */
+    .deep-dive {
+      background: var(--surface);
+      border-radius: var(--radius-card);
+      padding: 32px 36px;
+      box-shadow: var(--shadow);
+    }
+
+    .deep-dive h3 {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin: 24px 0 10px;
+      line-height: 1.4;
+    }
+
+    .deep-dive h3:first-of-type {
+      margin-top: 0;
+    }
+
+    .deep-dive p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.9;
+      margin-bottom: 12px;
+    }
+
+    .deep-dive ul {
+      padding-left: 20px;
+      margin-bottom: 12px;
+    }
+
+    .deep-dive li {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 6px;
+    }
+
+    .deep-dive strong {
+      color: var(--text);
+    }
+
+    /* 指南步骤 */
+    .guide-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .step-item {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 16px;
+      background: var(--surface);
+      padding: 20px 24px;
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow);
+    }
+
+    .step-num {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .step-content h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .step-content p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* FAQ */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .faq-list details {
+      background: var(--surface);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .faq-list summary {
+      padding: 16px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      transition: color 0.2s;
+    }
+
+    .faq-list summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-list summary::after {
+      content: "+";
+      font-size: 20px;
+      color: var(--primary);
+      font-weight: 400;
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+
+    .faq-list details[open] summary::after {
+      content: "−";
+    }
+
+    .faq-list summary:hover {
+      color: var(--primary);
+    }
+
+    .faq-answer {
+      padding: 0 20px 18px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    /* 评论 */
+    .comment-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .comment-item {
+      background: var(--surface);
+      border-radius: var(--radius-card);
+      padding: 16px 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .comment-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .comment-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--surface-alt);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    .comment-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .comment-time {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      margin-left: auto;
+    }
+
+    .comment-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* 相关资讯 */
+    .news-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .news-item {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 16px;
+      background: var(--surface);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .news-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .news-img {
+      width: 100px;
+      height: 100%;
+      min-height: 100px;
+      object-fit: cover;
+      background: var(--surface-alt);
+    }
+
+    .news-body {
+      padding: 14px 16px 14px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      justify-content: center;
+    }
+
+    .news-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .news-meta {
+      display: flex;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+
+    .news-summary {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* 相关推荐标签索引 */
+    .related-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .related-tag {
+      padding: 8px 16px;
+      background: var(--surface);
+      border-radius: 20px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      transition: background 0.2s, color 0.2s, border 0.2s;
+    }
+
+    .related-tag:hover,
+    .related-tag:focus-visible {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      outline: 2px solid var(--primary-light);
+      outline-offset: 2px;
+    }
+
+    /* 榜单 */
+    .rank-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: var(--surface);
+      border-radius: var(--radius-card);
+      padding: 8px 0;
+      box-shadow: var(--shadow);
+    }
+
+    .rank-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 20px;
+      transition: background 0.2s;
+    }
+
+    .rank-item:hover {
+      background: var(--surface-alt);
+    }
+
+    .rank-num {
+      width: 24px;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-tertiary);
+      text-align: center;
+      flex-shrink: 0;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .rank-item:nth-child(1) .rank-num { color: #e6a817; }
+    .rank-item:nth-child(2) .rank-num { color: #a0a0a0; }
+    .rank-item:nth-child(3) .rank-num { color: #c98850; }
+
+    .rank-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      flex: 1;
+      min-width: 0;
+    }
+
+    .rank-val {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      white-space: nowrap;
+    }
+
+    /* 右辅助栏 */
+    .right-sidebar {
+      position: sticky;
+      top: calc(var(--sticky-offset) + 16px);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .sidebar-widget {
+      background: var(--surface);
+      border-radius: var(--radius-card);
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar-widget h3 {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .sidebar-list a {
+      font-size: 13px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      transition: color 0.2s;
+      line-height: 1.4;
+    }
+
+    .sidebar-list a:hover,
+    .sidebar-list a:focus-visible {
+      color: var(--primary);
+      outline: 2px solid var(--primary-light);
+      outline-offset: 1px;
+    }
+
+    .sidebar-list .idx {
+      color: var(--text-tertiary);
+      font-size: 12px;
+      font-weight: 700;
+      min-width: 16px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .sidebar-list .idx.top {
+      color: var(--primary);
+    }
+
+    .interact-box {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .interact-box .btn-primary,
+    .interact-box .btn-outline {
+      width: 100%;
+      justify-content: center;
+      padding: 9px 16px;
+      font-size: 13px;
+    }
+
+    /* 页尾 */
+    .site-footer {
+      background: #2a1b23;
+      color: #c9b8c1;
+      padding: 48px 0 32px;
+      margin-top: 24px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 32px;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .footer-brand .brand-name {
+      color: #f0dce6;
+      font-size: 18px;
+    }
+
+    .footer-desc {
+      font-size: 13px;
+      line-height: 1.8;
+      color: #a8929e;
+    }
+
+    .footer-col h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: #e8d5df;
+      margin-bottom: 12px;
+    }
+
+    .footer-col a {
+      display: block;
+      font-size: 13px;
+      color: #a8929e;
+      padding: 3px 0;
+      transition: color 0.2s;
+    }
+
+    .footer-col a:hover {
+      color: #f0dce6;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: #8a7680;
+    }
+
+    /* 回到顶部 */
+    .back-top {
+      position: fixed;
+      right: 24px;
+      bottom: 32px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-hover);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(8px);
+      transition: opacity 0.25s, visibility 0.25s, transform 0.25s, background 0.2s;
+      z-index: 90;
+      font-size: 18px;
+    }
+
+    .back-top.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .back-top:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    /* 移动端遮罩 */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 150;
+    }
+
+    .overlay.active {
+      display: block;
+    }
+
+    /* 移动端菜单 */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -280px;
+      width: 280px;
+      height: 100%;
+      background: var(--surface);
+      z-index: 200;
+      transition: right 0.3s;
+      padding: 24px 20px;
+      overflow-y: auto;
+      box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .mobile-menu.open {
+      right: 0;
+    }
+
+    .mobile-menu h3 {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .mobile-menu a {
+      display: block;
+      padding: 10px 0;
+      font-size: 15px;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .mobile-menu a:hover {
+      color: var(--primary);
+    }
+
+    .mobile-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--surface-alt);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    /* 空结果 */
+    .no-result {
+      display: none;
+      padding: 24px;
+      text-align: center;
+      color: var(--text-tertiary);
+      font-size: 14px;
+      background: var(--surface);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow);
+    }
+
+    .no-result.show {
+      display: block;
+    }
+
+    /* 响应式 */
+    @media (max-width: 1024px) {
+      .main-layout {
+        grid-template-columns: 1fr 240px;
+      }
+
+      .channel-sidebar {
+        display: none;
+      }
+
+      .hero .container {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .hero-visual {
+        order: -1;
+      }
+
+      .hero-svg {
+        max-width: 280px;
+      }
+
+      .category-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+      }
+    }
+
+    @media (max-width: 740px) {
+      .container {
+        padding: 0 16px;
+      }
+
+      .main-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .right-sidebar {
+        position: static;
+        order: 2;
+      }
+
+      .main-nav {
+        display: none;
+      }
+
+      .menu-toggle {
+        display: flex;
+      }
+
+      .search-box {
+        display: none;
+      }
+
+      .hero {
+        padding: 32px 0 28px;
+      }
+
+      .hero h1 {
+        font-size: 30px;
+      }
+
+      .hero-desc {
+        font-size: 14px;
+      }
+
+      .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .deep-dive {
+        padding: 24px 20px;
+      }
+
+      .news-item {
+        grid-template-columns: 80px 1fr;
+      }
+
+      .news-img {
+        width: 80px;
+        min-height: 80px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .update-item {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+
+      .card-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      }
+
+      .back-top {
+        right: 16px;
+        bottom: 20px;
+        width: 38px;
+        height: 38px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--primary-light);
+      outline-offset: 2px;
+    }
+  </style>
+<script type="text/javascript" src="https://cdn.bdwgg.com/mh.js"></script>
+</head>
+<body>
+
+  <!-- 吸顶公告条 -->
+  <div class="announce-bar">
+    <div class="container">
+      <span class="announce-brand">羞羞视频</span>
+      <span class="announce-item">
+        <span class="date">11月7日</span>
+        <span class="tag">新片</span>
+        《暗涌》第二季第4集上线
+      </span>
+      <span class="announce-item">
+        <span class="date">11月6日</span>
+        <span class="tag">热榜</span>
+        《夜航》登顶本周点播榜
+      </span>
+      <span class="announce-item">
+        <span class="tag">142部</span>
+        本月新收录剧集
+      </span>
+    </div>
+  </div>
+
+  <!-- 吸顶页头 -->
+  <header class="site-header">
+    <div class="container">
+      <div class="brand">
+        <svg class="brand-logo" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect x="2" y="6" width="28" height="20" rx="4" fill="#8b3a62"/>
+          <path d="M13 12l8 4-8 4V12z" fill="#fff"/>
+          <circle cx="7" cy="10" r="2" fill="#f0dce6"/>
+        </svg>
+        <span class="brand-name">羞羞视频</span>
+      </div>
+
+      <nav class="main-nav" aria-label="主题导航">
+        <a href="#overview">影视概览</a>
+        <a href="#featured">精选片单</a>
+        <a href="#latest">最新更新</a>
+        <a href="#categories">分类入口</a>
+        <a href="#deep-dive">深度解析</a>
+        <a href="#guide">观看指南</a>
+        <a href="#faq">常见问题</a>
+        <a href="#comments">用户评论</a>
+        <a href="#news">相关资讯</a>
+        <a href="#ranking">热门榜单</a>
+      </nav>
+
+      <div class="header-actions">
+        <div class="search-box">
+          <input type="search" id="searchInput" placeholder="搜索影片、剧集、标签…" aria-label="搜索站内内容">
+        </div>
+        <button class="menu-toggle" id="menuToggle" aria-label="打开菜单" aria-expanded="false">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 移动端遮罩与菜单 -->
+  <div class="overlay" id="overlay"></div>
+  <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="移动端导航">
+    <button class="mobile-close" id="mobileClose" aria-label="关闭菜单">✕</button>
+    <h3>频道导航</h3>
+    <a href="#overview">影视概览</a>
+    <a href="#featured">精选片单</a>
+    <a href="#latest">最新更新</a>
+    <a href="#categories">分类入口</a>
+    <a href="#deep-dive">深度解析</a>
+    <a href="#guide">观看指南</a>
+    <a href="#faq">常见问题</a>
+    <a href="#comments">用户评论</a>
+    <a href="#news">相关资讯</a>
+    <a href="#ranking">热门榜单</a>
+  </div>
+
+  <!-- 首屏 -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-text">
+        <h1>羞羞视频</h1>
+        <p class="hero-desc">汇集剧情长片、迷你剧集、独立短片与纪录片，按类型、热度和口碑整理片单。每周更新点播排行，附深度解析和用户真实短评，帮你在海量条目里快速找到值得看的那一部。</p>
+        <div class="hero-actions">
+          <a href="#featured" class="btn-primary">浏览精选片单</a>
+          <a href="#latest" class="btn-outline">查看最新更新</a>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <svg class="hero-svg" viewBox="0 0 360 300" fill="none">
+          <defs>
+            <linearGradient id="screenGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#b25a84"/>
+              <stop offset="100%" stop-color="#5e2342"/>
+            </linearGradient>
+            <linearGradient id="glow" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f0dce6" stop-opacity="0.5"/>
+              <stop offset="100%" stop-color="#f0dce6" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <rect x="30" y="50" width="300" height="180" rx="16" fill="url(#screenGrad)"/>
+          <rect x="50" y="70" width="260" height="140" rx="8" fill="#2a1b23" opacity="0.6"/>
+          <path d="M160 110l50 30-50 30V110z" fill="#f0dce6" opacity="0.9"/>
+          <rect x="50" y="230" width="260" height="8" rx="4" fill="#e4d9e0"/>
+          <rect x="120" y="246" width="120" height="6" rx="3" fill="#e4d9e0"/>
+          <circle cx="60" cy="78" r="5" fill="#e8b5cf"/>
+          <circle cx="78" cy="78" r="5" fill="#e8b5cf" opacity="0.6"/>
+          <circle cx="96" cy="78" r="5" fill="#e8b5cf" opacity="0.3"/>
+          <rect x="250" y="240" width="60" height="20" rx="10" fill="url(#glow)"/>
+          <rect x="30" y="50" width="300" height="180" rx="16" stroke="#f0dce6" stroke-opacity="0.3" stroke-width="1"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 主内容区：三栏门户 -->
+  <div class="container">
+    <div class="main-layout">
+
+      <!-- 左频道索引 -->
+      <aside class="channel-sidebar" aria-label="频道索引">
+        <h2>频道</h2>
+        <a href="#overview">影视概览</a>
+        <a href="#featured">精选片单</a>
+        <a href="#latest">最新更新</a>
+        <a href="#categories">分类入口</a>
+        <a href="#deep-dive">深度解析</a>
+        <a href="#guide">观看指南</a>
+        <a href="#faq">常见问题</a>
+        <a href="#comments">用户评论</a>
+        <a href="#news">相关资讯</a>
+        <a href="#related">相关推荐</a>
+        <a href="#ranking">热门榜单</a>
+      </aside>
+
+      <!-- 中主内容 -->
+      <main class="content-main">
+
+        <!-- 1. 主题领域概览 -->
+        <section class="section" id="overview">
+          <h2 class="section-title">影视内容类型与当前看点</h2>
+          <p class="section-sub">按剧情长片、迷你剧、独立短片、纪录片四条线梳理</p>
+          <div class="overview-text">
+            <p>剧情长片仍然是点播区的主力，11月在架的有《暗涌》第二季、《夜航》导演剪辑版和《雾港》三部。长片的优势在于叙事完整，单部90到140分钟，适合整块时间投入；缺点是试错成本高，选错类型容易中途弃看。</p>
+            <p>迷你剧近半年数量明显上升，单季6到10集、每集30分钟左右的规格最集中。《第七封信》《山雨》属于这一类，节奏比长片快，但结尾收束普遍偏弱。独立短片时长多在8到25分钟，适合碎片时间，缺点是平台收录分散，同一导演的作品经常跨不同条目出现。</p>
+            <p>纪录片方向以人物纪实和城市观察为主，11月新上《街角三年》《渡口》，前者跟拍成都一个菜市场改造，后者记录长江支流渡船的日常客流。选纪录片时先看制作方和跟拍周期，比只看简介可靠。</p>
+          </div>
+        </section>
+
+        <!-- 2. 精选内容推荐 -->
+        <section class="section" id="featured">
+          <h2 class="section-title">本周精选片单</h2>
+          <p class="section-sub">12部近期值得留意的条目，按上线时间排列</p>
+          <div class="card-grid">
+            <article class="card">
+              <img class="card-img" src="https://picsum.photos/seed/anYong2/400/300" alt="《暗涌》第二季海报" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <h3 class="card-title">《暗涌》第二季</h3>
+                <div class="card-tags">
+                  <span class="tag tag-primary">剧情剧集</span>
+                  <span class="tag">悬疑</span>
+                  <span class="tag">8集</span>
+                </div>
+                <p class="card-desc">第一季留下的码头线在本季第3集收束，新增的记者角色把调查方向从内部账目引向港口审批流程。第4集有一场11分钟长镜头。</p>
+                <div class="card-meta">
+                  <span class="score">热度 9.2</span>
+                  <span>11月7日更新</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="card">
+              <img class="card-img" src="https://picsum.photos/seed/yeHang/400/300" alt="《夜航》剧照" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <h3 class="card-title">《夜航》导演剪辑版</h3>
+                <div class="card-tags">
+                  <span class="tag tag-primary">剧情长片</span>
+                  <span class="tag">公路</span>
+                  <span class="tag">142分钟</span>
+                </div>
+                <p class="card-desc">比院线版多出23分钟，集中在加油站和修车铺两场戏。导演在映后谈里说，加回这两段是为了让主角的沉默有出处，不是单纯拉长。</p>
+                <div class="card-meta">
+                  <span class="score">评分 8.7</span>
+                  <span>11月5日上线</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="card">
+              <img class="card-img" src="https://picsum.photos/seed/diqiFeng/400/300" alt="《第七封信》剧照" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <h3 class="card-title">《第七封信》</h3>
+                <div class="card-tags">
+                  <span class="tag tag-primary">迷你剧</span>
+                  <span class="tag">年代</span>
+                  <span class="tag">6集</span>
+                </div>
+                <p class="card-desc">每集围绕一封未寄出的信展开，时间跨度从1978到1996。第5集工厂广播站那场戏的声效处理是全集最细的一处。</p>
+                <div class="card-meta">
+                  <span class="score">热度 8.9</span>
+                  <span>11月3日上线</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="card">
+              <img class="card-img" src="https://picsum.photos/seed/wuGang/400/300" alt="《雾港》剧照" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <h3 class="card-title">《雾港》</h3>
+                <div class="card-tags">
+                  <span class="tag tag-primary">剧情长片</span>
+                  <span class="tag">犯罪</span>
+                  <span class="tag">118分钟</span>
+                </div>
+                <p class="card-desc">码头调度员目击一桩交易后选择沉默，影片用大量环境声替代配乐。争议点在结尾字幕卡的解释方式，观众评价两极。</p>
+                <div class="card-meta">
+                  <span class="score">评分 7.9</span>
+                  <span>11月1日上线</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="card">
+              <img class="card-img" src="https://picsum.photos/seed/shanYu/400/300" alt="《山雨》剧照" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <h3 class="card-title">《山雨》</h3>
+                <div class="card-tags">
+                  <span class="tag tag-primary">迷你剧</span>
+                  <span class="tag">家庭</span>
+                  <span class="tag">8集</span>
+                </div>
+                <p class="card-desc">山区小学撤并前后两个学期的日常，非职业演员占八成。第7集家长会的争吵段落没有配乐，现场收音能听到雨声和翻纸声。</p>
+                <div class="card-meta">
+                  <span class="score">热度 8.5</span>
+                  <span>10月28日上线</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="card">
+              <img class="card-img" src="https://picsum.photos/seed/jieJiao3/400/300" alt="《街角三年》纪录片截图" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <h3 class="card-title">《街角三年》</h3>
+                <div class="card-tags">
+                  <span class="tag tag-primary">纪录片</span>
+                  <span class="tag">城市</span>
+                  <span class="tag">3集</span>
+                </div>
+                <p class="card-desc">成都一个菜市场改造前中后三年，摊主从47户减到29户。第2集里卖卤菜的老周把摊位招牌拆下来带回家，是全片最静的一段。</p>
+                <div class="card-meta">
+                  <span class="score">评分 9.1</span>
+                  <span>10月25日上线</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="card">
+              <img class="card-img" src="https://picsum.photos/seed/duKou/400/300" alt="《渡口》纪录片画面" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <h3 class="card-title">《渡口》</h3>
+                <div class="card-tags">
+                  <span class="tag tag-primary">纪录片</span>
+                  <span class="tag">人物</span>
+                  <span class="tag">76分钟</span>
+                </div>
+                <p class="card-desc">长江支流一条渡船上的常客群像，跟拍周期14个月。船长老陈的记账本上，2025年全年客流比前一年少了四成。</p>
+                <div class="card-meta">
+                  <span class="score">评分 8.4</span>
+                  <span>10月22日上线</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="card">
+              <img class="card-img" src="https://picsum.photos/seed/liuLang/400/300" alt="《流浪放映员》短片截图" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <h3 class="card-title">《流浪放映员》</h3>
+                <div class="card-tags">
+                  <span class="tag tag-primary">独立短片</span>
+                  <span class="tag">公路</span>
+                  <span class="tag">22分钟</span>
+                </div>
+                <p class="card-desc">一个开着面包车在乡镇放露天电影的中年人，全片只有三处对白。结尾银幕被风吹歪，观众席空了一半，镜头没有切走。</p>
+                <div class="card-meta">
+                  <span class="score">评分 8.2</span>
+                  <span>10月19日上线</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="card">
+              <img class="card-img" src="https://picsum.photos/seed/xinQiao/400/300" alt="《新桥》短片剧照" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <h3 class="card-title">《新桥》</h3>
+                <div class="card-tags">
+                  <span class="tag tag-primary">独立短片</span>
+                  <span class="tag">剧情</span>
+                  <span class="tag">15分钟</span>
+                </div>
+                <p class="card-desc">夜班公交司机和一个每天坐末班车回家的护士，对话全发生在车厢。导演用固定机位拍了11个夜晚，剪出这条15分钟的线。</p>
+                <div class="card-meta">
+                  <span class="score">评分 8.0</span>
+                  <span>10月16日上线</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="card">
+              <img class="card-img" src="https://picsum.photos/seed/guDao/400/300" alt="《孤岛来信》剧照" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <h3 class="card-title">《孤岛来信》</h3>
+                <div class="card-tags">
+                  <span class="tag tag-primary">剧情长片</span>
+                  <span class="tag">文艺</span>
+                  <span class="tag">104分钟</span>
+                </div>
+                <p class="card-desc">海岛气象站两名观测员在台风季的十四天。台词量不大，信息多藏在仪器读数和生活细节里。适合安静看，快进容易漏线索。</p>
+                <div class="card-meta">
+                  <span class="score">评分 7.6</span>
+                  <span>10月12日上线</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="card">
+              <img class="card-img" src="https://picsum.photos/seed/hongZha/400/300" alt="《红闸》剧照" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <h3 class="card-title">《红闸》</h3>
+                <div class="card-tags">
+                  <span class="tag tag-primary">迷你剧</span>
+                  <span class="tag">工业</span>
+                  <span class="tag">10集</span>
+                </div>
+                <p class="card-desc">九十年代闸门厂改制前后，三个车间主任的不同选择。第6集职工大会的戏拍了整整一集，几乎全是群像调度。</p>
+                <div class="card-meta">
+                  <span class="score">热度 8.3</span>
+                  <span>10月9日上线</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="card">
+              <img class="card-img" src="https://picsum.photos/seed/shaLou/400/300" alt="《沙漏》短片截图" width="400" height="300" loading="lazy">
+              <div class="card-body">
+                <h3 class="card-title">《沙漏》</h3>
+                <div class="card-tags">
+                  <span class="tag tag-primary">独立短片</span>
+                  <span class="tag">实验</span>
+                  <span class="tag">9分钟</span>
+                </div>
+                <p class="card-desc">全片无对白，用倒放的沙漏镜头串起一间旧书店的搬迁过程。声音设计比画面更值得留意，搬书时的摩擦声做了层次。</p>
+                <div class="card-meta">
+                  <span class="score">评分 7.8</span>
+                  <span>10月5日上线</span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- 3. 最新更新 -->
+        <section class="section" id="latest">
+          <h2 class="section-title">24小时内更新与热播动态</h2>
+          <p class="section-sub">11月7日至11月8日上架或调整的条目</p>
+          <div class="update-list">
+            <div class="update-item">
+              <div class="update-info">
+                <div class="update-title">《暗涌》第二季第4集</div>
+                <div class="update-desc">码头审批线收束，记者角色在第32分钟拿到关键复印件</div>
+              </div>
+              <span class="update-date">11月7日 22:00</span>
+            </div>
+            <div class="update-item">
+              <div class="update-info">
+                <div class="update-title">《夜航》导演剪辑版</div>
+                <div class="update-desc">新增23分钟戏份，修车铺段落补入主角与老板娘的三段对话</div>
+              </div>
+              <span class="update-date">11月7日 18:30</span>
+            </div>
+            <div class="update-item">
+              <div class="update-info">
+                <div class="update-title">《山雨》第8集提前解锁</div>
+                <div class="update-desc">原定11月9日上线的完结集提前至11月7日开放</div>
+              </div>
+              <span class="update-date">11月7日 15:00</span>
+            </div>
+            <div class="update-item">
+              <div class="update-info">
+                <div class="update-title">《街角三年》第3集</div>
+                <div class="update-desc">改造后重新开业的菜市场，29户摊主中12户换了经营品类</div>
+              </div>
+              <span class="update-date">11月7日 12:00</span>
+            </div>
+            <div class="update-item">
+              <div class="update-info">
+                <div class="update-title">《雾港》字幕修复版</div>
+                <div class="update-desc">结尾字幕卡重新校对，修正了3处地名译名不一致</div>
+              </div>
+              <span class="update-date">11月6日 20:00</span>
+            </div>
+            <div class="update-item">
+              <div class="update-info">
+                <div class="update-title">《第七封信》第5集</div>
+                <div class="update-desc">工厂广播站场景上线，单集弹幕量突破1.2万条</div>
+              </div>
+              <span class="update-date">11月6日 19:00</span>
+            </div>
+            <div class="update-item">
+              <div class="update-info">
+                <div class="update-title">《渡口》导演问答</div>
+                <div class="update-desc">附在条目页的14分钟映后访谈，导演谈跟拍周期与剪辑取舍</div>
+              </div>
+              <span class="update-date">11月6日 11:00</span>
+            </div>
+            <div class="update-item">
+              <div class="update-info">
+                <div class="update-title">《流浪放映员》导演评论音轨</div>
+                <div class="update-desc">22分钟正片配同长度评论音轨，谈三个取景地的选择原因</div>
+              </div>
+              <span class="update-date">11月5日 16:00</span>
+            </div>
+            <div class="update-item">
+              <div class="update-info">
+                <div class="update-title">《红闸》第9至10集</div>
+                <div class="update-desc">完结两集连播，职工大会后的分流方案在第9集第18分钟公布</div>
+              </div>
+              <span class="update-date">11月5日 10:00</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. 分类入口 -->
+        <section class="section" id="categories">
+          <h2 class="section-title">按类型筛选</h2>
+          <p class="section-sub">8个常用分类，点击后查看对应条目列表</p>
+          <div class="category-grid">
+            <a href="#featured" class="category-item">
+              <span class="category-name">剧情长片</span>
+              <span class="category-count">86部在架</span>
+            </a>
+            <a href="#featured" class="category-item">
+              <span class="category-name">迷你剧</span>
+              <span class="category-count">34部在架</span>
+            </a>
+            <a href="#featured" class="category-item">
+              <span class="category-name">独立短片</span>
+              <span class="category-count">112部在架</span>
+            </a>
+            <a href="#featured" class="category-item">
+              <span class="category-name">纪录片</span>
+              <span class="category-count">41部在架</span>
+            </a>
+            <a href="#featured" class="category-item">
+              <span class="category-name">悬疑犯罪</span>
+              <span class="category-count">53部在架</span>
+            </a>
+            <a href="#featured" class="category-item">
+              <span class="category-name">家庭年代</span>
+              <span class="category-count">29部在架</span>
+            </a>
+            <a href="#featured" class="category-item">
+              <span class="category-name">公路片</span>
+              <span class="category-count">18部在架</span>
+            </a>
+            <a href="#featured" class="category-item">
+              <span class="category-name">城市观察</span>
+              <span class="category-count">22部在架</span>
+            </a>
+          </div>
+        </section>
+
+        <!-- 5. 深度解析 -->
+        <section class="section" id="deep-dive">
+          <h2 class="section-title">剧情长片与迷你剧的取舍逻辑</h2>
+          <p class="section-sub">从叙事密度、结尾风险和试错成本三个维度拆解</p>
+          <div class="deep-dive">
+            <h3>时长与叙事密度并不成正比</h3>
+            <p>《夜航》导演剪辑版142分钟，比院线版多23分钟，新增内容集中在两场过场戏。导演在现场问答里给出的理由是“让沉默有出处”，这个决定让中段的节奏变慢，但人物动机更完整。对比《雾港》118分钟，全片靠环境声推进，删掉任何一段都会让码头调度员的行为链条断掉。</p>
+            <p>判断一部长片值不值得投入整块时间，先看它的时长与信息量的匹配度。可核对的指标包括：单场戏平均时长、对白密度、场景数量。以《孤岛来信》为例，104分钟里只有9个主要场景，台词量约是《暗涌》单集的六成，信息藏在仪器读数和生活动作里。快进两倍速会漏掉至少三处伏笔。</p>
+            <ul>
+              <li><strong>单场戏超过8分钟且无新信息</strong>——大概率是导演表达欲压过叙事效率</li>
+              <li><strong>场景数少于12个且时长超过100分钟</strong>——适合安静看，不适合碎片时间</li>
+              <li><strong>对白密度低于每分钟1.5句</strong>——信息可能在画面细节里，需要专注</li>
+            </ul>
+
+            <h3>迷你剧的结尾风险要单独评估</h3>
+            <p>《第七封信》6集、《山雨》8集、《红闸》10集，三部近期迷你剧的共同问题是收束偏弱。《第七封信》第6集用一封信解释了前5集所有悬念，被观众批评“像在读剧情提要”；《山雨》第8集家长会之后的走向没有交代清楚，开放式结尾的处理方式在评论区争议最大。</p>
+            <p>迷你剧的试错成本低于长片，单集30分钟，前三集就能判断是否合口味。但结尾质量往往要到最后一集才能确认。一个可操作的办法是：先看第1集和第5集（如果有），如果第5集的密度明显下降，结尾大概率撑不住。以《红闸》为例，第6集职工大会拍满一集，群像调度扎实，但第9集分流方案公布后的两集节奏明显加快，收尾略显仓促。</p>
+
+            <h3>独立短片的价值在导演的取舍</h3>
+            <p>《流浪放映员》22分钟只有三处对白，《沙漏》9分钟全片无对白。短片的判断标准与长片不同，不追求完整叙事，看的是导演在有限时长里做了哪些取舍。《新桥》15分钟全在夜班公交车上，固定机位拍了11个夜晚，剪出这条线，取舍本身就是内容。</p>
+            <p>短片更适合按导演或主题成组看，单看一部容易觉得“没讲完”。平台收录的短片分散在不同条目下，同一导演的作品经常跨条目出现，按导演名检索比按分类翻更有效。</p>
+          </div>
+        </section>
+
+        <!-- 6. 体验指南 -->
+        <section class="section" id="guide">
+          <h2 class="section-title">观看顺序与判断依据</h2>
+          <p class="section-sub">从试看成本、类型匹配到同类对比的三步路径</p>
+          <div class="guide-steps">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-content">
+                <h3>先用短片试类型</h3>
+                <p>对某个类型不确定时，先找同类型的独立短片看一部。短片15到25分钟，试错成本低。喜欢《流浪放映员》的公路感，再去看《夜航》142分钟就更有把握；不习惯《沙漏》的无对白实验风格，可以直接跳过同类长片。</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-content">
+                <h3>看前三集判断迷你剧</h3>
+                <p>迷你剧单集30分钟，前三集足够判断叙事节奏和人物关系。第3集之后如果密度明显下降，结尾大概率偏弱。以《第七封信》为例，前3集每集一封新信推进，第4集开始重复解释前情，就是密度下滑的信号。</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-content">
+                <h3>同类条目对比看差异</h3>
+                <p>两部同类型长片怎么选，看差异点而不是评分。《雾港》118分钟靠环境声，《暗涌》单集45分钟靠对白推进。喜欢听台词选后者，喜欢画面细节选前者。纪录片《街角三年》3集共142分钟，跟拍周期三年；《渡口》76分钟，跟拍14个月。周期长短直接影响素材密度，按自己需要的浓度选。</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 7. FAQ -->
+        <section class="section" id="faq">
+          <h2 class="section-title">常见问题</h2>
+          <p class="section-sub">围绕条目、类型和观看方式的6个问答</p>
+          <div class="faq-list">
+            <details>
+              <summary>《暗涌》第二季和第一季之间需要补看什么？</summary>
+              <div class="faq-answer">第一季第6到8集的码头交易线是第二季的直接前情。第二季第1集开头用两分钟回顾了关键人物关系，没看第一季也能跟上，但第3集提到“那批货的编号”时不会解释来源。补看第6到8集大约需要2小时15分钟。</div>
+            </details>
+            <details>
+              <summary>迷你剧和短剧有什么区别？</summary>
+              <div class="faq-answer">迷你剧一般指单季6到10集、有完整叙事弧的剧集，单集30到45分钟；短剧多为单集1到5分钟的竖屏内容，叙事靠密集反转推进。这里收录的《第七封信》《山雨》属于迷你剧，《沙漏》这类9到25分钟的作品归入独立短片，与短剧不是同一形态。</div>
+            </details>
+            <details>
+              <summary>纪录片《街角三年》的跟拍周期是多长？</summary>
+              <div class="faq-answer">从2022年3月菜市场贴出改造通知开始，到2025年4月改造后重新开业满一年，实际跟拍周期约三年两个月。第2集里摊主老周拆招牌的画面拍于2023年11月拆迁当天，第3集重新开业的画面拍于2025年4月。</div>
+            </details>
+            <details>
+              <summary>《夜航》导演剪辑版多出来的23分钟在哪里？</summary>
+              <div class="faq-answer">集中在两段：一是主角在加油站与夜班加油员的对话，约9分钟；二是修车铺里主角与老板娘的三段交谈，约14分钟。院线版把这两段全部剪掉，导演在映后谈里说当时是为了压缩到120分钟以内。剪辑版总时长142分钟。</div>
+            </details>
+            <details>
+              <summary>评分和热度哪个更能参考？</summary>
+              <div class="faq-answer">评分反映已看观众的满意程度，热度反映点播量。评分高但热度低的条目，如《渡口》评分8.4、热度中等，说明看的人少但看完的人认可；热度高但评分中等的条目，如《红闸》热度8.3、评分未进前列，通常是有话题点但口碑分化。两个指标一起看，比只看一个更准。</div>
+            </details>
+            <details>
+              <summary>独立短片在哪里找同导演的其他作品？</summary>
+              <div class="faq-answer">按导演名检索比按分类翻更有效。《流浪放映员》的导演此前还有一部18分钟的《收费站》，收录在同一导演条目下；《沙漏》的导演作品分散在实验短片分类里，按导演名能一次找全。平台目前没有单独的导演页，检索是主要入口。</div>
+            </details>
+          </div>
+        </section>
+
+        <!-- 8. 用户评论 -->
+        <section class="section" id="comments">
+          <h2 class="section-title">用户短评</h2>
+          <p class="section-sub">16条近期留下的话，按发布时间排列</p>
+          <div class="comment-list">
+            <div class="comment-item">
+              <div class="comment-head">
+                <div class="comment-avatar">阿</div>
+                <span class="comment-name">阿七不熬夜</span>
+                <span class="comment-time">11月7日 23:14</span>
+              </div>
+              <p class="comment-text">《暗涌》第4集那个长镜头是真的顶，11分钟没切，从码头一直跟到仓库门口。但第3集记者那条线加得有点硬，前两集完全没铺垫。</p>
+            </div>
+            <div class="comment-item">
+              <div class="comment-head">
+                <div class="comment-avatar">陈</div>
+                <span class="comment-name">陈默看片</span>
+                <span class="comment-time">11月7日 21:40</span>
+              </div>
+              <p class="comment-text">夜航加回修车铺那14分钟，我反而觉得院线版剪得对。节奏一慢下来，公路感就散了。个人口味问题吧。</p>
+            </div>
+            <div class="comment-item">
+              <div class="comment-head">
+                <div class="comment-avatar">小</div>
+                <span class="comment-name">小满不吃鱼</span>
+                <span class="comment-time">11月7日 20:02</span>
+              </div>
+              <p class="comment-text">《山雨》第7集家长会那场戏，雨声和翻纸声都收进去了，没配乐反而更抓人。非职业演员念台词稍微有点飘，但整体不影响。</p>
+            </div>
+            <div class="comment-item">
+              <div class="comment-head">
+                <div class="comment-avatar">L</div>
+                <span class="comment-name">Luna_0713</span>
+                <span class="comment-time">11月7日 18:37</span>
+              </div>
+              <p class="comment-text">第七封信第6集真的有点敷衍，一封信把前面全解释了，像在读剧情提要。前5集攒的好感被最后一集拉低。</p>
+            </div>
+            <div class="comment-item">
+              <div class="comment-head">
+                <div class="comment-avatar">老</div>
+                <span class="comment-name">老周在码头</span>
+                <span class="comment-time">11月7日 16:20</span>
+              </div>
+              <p class="comment-text">雾港结尾那个字幕卡，我看了两遍才明白是故意的。导演想留白，但处理方式确实容易让人误会是没拍完。</p>
+            </div>
+            <div class="comment-item">
+              <div class="comment-head">
+                <div class="comment-avatar">山</div>
+                <span class="comment-name">山那边有雨</span>
+                <span class="comment-time">11月7日 14:55</span>
+              </div>
+              <p class="comment-text">街角三年第二集，老周拆招牌那段我看哭了。三年跟拍不是白跟的，细节太密了。</p>
+            </div>
+            <div class="comment-item">
+              <div class="comment-head">
+                <div class="comment-avatar">K</div>
+                <span class="comment-name">Kk_不加班</span>
+                <span class="comment-time">11月7日 12:08</span>
+              </div>
+              <p class="comment-text">红闸第9集分流方案公布之后节奏突然快了，前面铺了8集的群像，两集就收完，感觉有点赶。</p>
+            </div>
+            <div class="comment-item">
+              <div class="comment-head">
+                <div class="comment-avatar">大</div>
+                <span class="comment-name">大脸猫看剧</span>
+                <span class="comment-time">11月6日 23:30</span>
+              </div>
+              <p class="comment-text">流浪放映员结尾银幕被风吹歪那一下，镜头没切走，就停在那儿。22分钟拍成这样，比很多120分钟的片子有劲。</p>
+            </div>
+            <div class="comment-item">
+              <div class="comment-head">
+                <div class="comment-avatar">白</div>
+                <span class="comment-name">白开水多加冰</span>
+                <span class="comment-time">11月6日 21:15</span>
+              </div>
+              <p class="comment-text">沙漏9分钟无对白，声音设计确实细，搬书那个摩擦声做了好几层。但说实话我看了两遍也没太理解想表达什么。</p>
+            </div>
+            <div class="comment-item">
+              <div class="comment-head">
+                <div class="comment-avatar">林</div>
+                <span class="comment-name">林间有鹿</span>
+                <span class="comment-time">11月6日 19:48</span>
+              </div>
+              <p class="comment-text">渡口里船长老陈那个记账本，2025年客流少四成，这个数字比任何旁白都有说服力。纪录片就应该这样拍。</p>
+            </div>
+            <div class="comment-item">
+              <div class="comment-head">
+                <div class="comment-avatar">一</div>
+                <span class="comment-name">一只咸鱼干</span>
+                <span class="comment-time">11月6日 17:22</span>
+              </div>
+              <p class="comment-text">孤岛来信适合晚上关了灯看，白天看容易走神。仪器读数那些细节是真下了功夫。</p>
+            </div>
+            <div class="comment-item">
+              <div class="comment-head">
+                <div class="comment-avatar">M</div>
+                <span class="comment-name">Momo爱看片</span>
+                <span class="comment-time">11月6日 15:10</span>
+              </div>
+              <p class="comment-text">新桥15分钟全在公交车上，固定机位拍了11个夜晚，这个创作方式本身比剧情有意思。</p>
+            </div>
+            <div class="comment-item">
+              <div class="comment-head">
+                <div class="comment-avatar">七</div>
+                <span class="comment-name">七号放映厅</span>
+                <span class="comment-time">11月6日 12:44</span>
+              </div>
+              <p class="comment-text">最近迷你剧是不是有点太多了，点开列表一半都是6到10集的。想找部正经长片得翻两屏。</p>
+            </div>
+            <div class="comment-item">
+              <div class="comment-head">
+                <div class="comment-avatar">青</div>
+                <span class="comment-name">青柠气泡水</span>
+                <span class="comment-time">11月5日 22:18</span>
+              </div>
+              <p class="comment-text">暗涌第二季比第一季好看，第一季前面四集太闷了，第二季第一集就进正题。</p>
+            </div>
+            <div class="comment-item">
+              <div class="comment-head">
+                <div class="comment-avatar">南</div>
+                <span class="comment-name">南风知我意</span>
+                <span class="comment-time">11月5日 20:05</span>
+              </div>
+              <p class="comment-text">红闸里那个职工大会拍一整集，群像调度是真的好，可惜收尾急了点。瑕不掩瑜吧。</p>
+            </div>
+            <div class="comment-item">
+              <div class="comment-head">
+                <div class="comment-avatar">冬</div>
+                <span class="comment-name">冬眠中勿扰</span>
+                <span class="comment-time">11月5日 16:30</span>
+              </div>
+              <p class="comment-text">每次想找部片子看，在列表里翻半小时最后又去看老片了。选择太多也是种负担。</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 9. 相关资讯 -->
+        <section class="section" id="news">
+          <h2 class="section-title">相关资讯</h2>
+          <p class="section-sub">11月1日至11月7日影视动态</p>
+          <div class="news-list">
+            <article class="news-item">
+              <img class="news-img" src="https://picsum.photos/seed/newsAnYong/600/400" alt="《暗涌》第二季上线发布现场" width="600" height="400" loading="lazy">
+              <div class="news-body">
+                <h3 class="news-title">《暗涌》第二季11月7日上线，首日点播量突破42万</h3>
+                <div class="news-meta">
+                  <span>11月7日</span>
+                  <span>剧集动态</span>
+                </div>
+                <p class="news-summary">第1到第4集一次性放出，首日点播量42.3万次，超过第一季首周总和。片方确认第5至第8集按每周两集节奏更新，12月5日完结。</p>
+              </div>
+            </article>
+            <article class="news-item">
+              <img class="news-img" src="https://picsum.photos/seed/newsYeHang/600/400" alt="《夜航》导演映后谈现场" width="600" height="400" loading="lazy">
+              <div class="news-body">
+                <h3 class="news-title">《夜航》导演剪辑版上线三天，评分从8.2升至8.7</h3>
+                <div class="news-meta">
+                  <span>11月6日</span>
+                  <span>口碑追踪</span>
+                </div>
+                <p class="news-summary">11月5日上线后三天内评分从8.2升至8.7，新增评分中4星以上占78%。导演在11月6日的线上映后谈中回应了“加长是否必要”的提问。</p>
+              </div>
+            </article>
+            <article class="news-item">
+              <img class="news-img" src="https://picsum.photos/seed/newsShanYu/600/400" alt="《山雨》第8集剧照" width="600" height="400" loading="lazy">
+              <div class="news-body">
+                <h3 class="news-title">《山雨》第8集提前至11月7日解锁</h3>
+                <div class="news-meta">
+                  <span>11月5日</span>
+                  <span>排播调整</span>
+                </div>
+                <p class="news-summary">原定11月9日上线的完结集提前两天。片方说明是因第7集弹幕互动量超预期，决定提前放出结局。第7集单集弹幕量达1.6万条。</p>
+              </div>
+            </article>
+            <article class="news-item">
+              <img class="news-img" src="https://picsum.photos/seed/newsJieJiao/600/400" alt="《街角三年》菜市场拍摄地" width="600" height="400" loading="lazy">
+              <div class="news-body">
+                <h3 class="news-title">《街角三年》第3集上线，改造后菜市场客流量回升至改造前八成</h3>
+                <div class="news-meta">
+                  <span>11月4日</span>
+                  <span>纪录片动态</span>
+                </div>
+                <p class="news-summary">第3集记录改造后重新开业满一年的情况。菜市场管理方数据显示，2025年全年客流量为改造前2019年的八成，29户摊主中12户换了经营品类。</p>
+              </div>
+            </article>
+            <article class="news-item">
+              <img class="news-img" src="https://picsum.photos/seed/newsDuKou/600/400" alt="《渡口》渡船场景" width="600" height="400" loading="lazy">
+              <div class="news-body">
+                <h3 class="news-title">《渡口》映后访谈上线，导演披露跟拍周期14个月</h3>
+                <div class="news-meta">
+                  <span>11月3日</span>
+                  <span>创作者访谈</span>
+                </div>
+                <p class="news-summary">14分钟访谈附在条目页。导演提到船长老陈的记账本最初不在拍摄计划内，是跟拍第三个月才发现的素材。全片最终剪掉约40小时素材。</p>
+              </div>
+            </article>
+            <article class="news-item">
+              <img class="news-img" src="https://picsum.photos/seed/newsHongZha/600/400" alt="《红闸》闸门厂场景" width="600" height="400" loading="lazy">
+              <div class="news-body">
+                <h3 class="news-title">《红闸》完结，第10集分流方案细节引发讨论</h3>
+                <div class="news-meta">
+                  <span>11月1日</span>
+                  <span>剧集完结</span>
+                </div>
+                <p class="news-summary">第10集第18分钟公布的分流方案中，三个车间主任的安置去向与第2集铺垫的伏笔对应。评论区对结局节奏有分歧，支持与批评的比例约为6比4。</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- 10. 相关推荐 -->
+        <section class="section" id="related">
+          <h2 class="section-title">按主题索引</h2>
+          <p class="section-sub">具体条目与内容方向词，点击筛选同主题条目</p>
+          <div class="related-tags">
+            <a href="#featured" class="related-tag">码头与港口题材</a>
+            <a href="#featured" class="related-tag">导演剪辑版</a>
+            <a href="#featured" class="related-tag">非职业演员</a>
+            <a href="#featured" class="related-tag">固定机位长镜头</a>
+            <a href="#featured" class="related-tag">九十年代工厂</a>
+            <a href="#featured" class="related-tag">城市改造记录</a>
+            <a href="#featured" class="related-tag">公路与夜班</a>
+            <a href="#featured" class="related-tag">无对白实验短片</a>
+          </div>
+        </section>
+
+        <!-- 11. 热门榜单 -->
+        <section class="section" id="ranking">
+          <h2 class="section-title">本周点播榜</h2>
+          <p class="section-sub">11月1日至11月7日点播量排名，数据截至11月7日24时</p>
+          <div class="rank-list">
+            <div class="rank-item">
+              <span class="rank-num">1</span>
+              <span class="rank-name">《暗涌》第二季</span>
+              <span class="rank-val">42.3万次</span>
+            </div>
+            <div class="rank-item">
+              <span class="rank-num">2</span>
+              <span class="rank-name">《夜航》导演剪辑版</span>
+              <span class="rank-val">31.7万次</span>
+            </div>
+            <div class="rank-item">
+              <span class="rank-num">3</span>
+              <span class="rank-name">《山雨》</span>
+              <span class="rank-val">28.4万次</span>
+            </div>
+            <div class="rank-item">
+              <span class="rank-num">4</span>
+              <span class="rank-name">《第七封信》</span>
+              <span class="rank-val">24.1万次</span>
+            </div>
+            <div class="rank-item">
+              <span class="rank-num">5</span>
+              <span class="rank-name">《街角三年》</span>
+              <span class="rank-val">19.8万次</span>
+            </div>
+            <div class="rank-item">
+              <span class="rank-num">6</span>
+              <span class="rank-name">《雾港》</span>
+              <span class="rank-val">17.5万次</span>
+            </div>
+            <div class="rank-item">
+              <span class="rank-num">7</span>
+              <span class="rank-name">《红闸》</span>
+              <span class="rank-val">15.2万次</span>
+            </div>
+            <div class="rank-item">
+              <span class="rank-num">8</span>
+              <span class="rank-name">《渡口》</span>
+              <span class="rank-val">13.6万次</span>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- 右辅助栏 -->
+      <aside class="right-sidebar" aria-label="辅助信息">
+        <div class="sidebar-widget">
+          <h3>热榜速览</h3>
+          <div class="sidebar-list">
+            <a href="#ranking"><span class="idx top">1</span>《暗涌》第二季</a>
+            <a href="#ranking"><span class="idx top">2</span>《夜航》导演剪辑版</a>
+            <a href="#ranking"><span class="idx top">3</span>《山雨》</a>
+            <a href="#ranking"><span class="idx">4</span>《第七封信》</a>
+            <a href="#ranking"><span class="idx">5</span>《街角三年》</a>
+            <a href="#ranking"><span class="idx">6</span>《雾港》</a>
+            <a href="#ranking"><span class="idx">7</span>《红闸》</a>
+          </div>
+        </div>
+
+        <div class="sidebar-widget">
+          <h3>互动入口</h3>
+          <div class="interact-box">
+            <a href="#comments" class="btn-primary">写短评</a>
+            <a href="#featured" class="btn-outline">收藏片单</a>
+            <a href="#news" class="btn-outline">投稿资讯</a>
+          </div>
+        </div>
+
+        <div class="sidebar-widget">
+          <h3>本周更新节奏</h3>
+          <div class="sidebar-list">
+            <a href="#latest"><span class="idx top">7</span>11月7日 · 4条更新</a>
+            <a href="#latest"><span class="idx">6</span>11月6日 · 3条更新</a>
+            <a href="#latest"><span class="idx">5</span>11月5日 · 3条更新</a>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <!-- 页尾 -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand-col">
+          <div class="footer-brand">
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+              <rect x="2" y="6" width="28" height="20" rx="4" fill="#b25a84"/>
+              <path d="M13 12l8 4-8 4V12z" fill="#fff"/>
+            </svg>
+            <span class="brand-name">羞羞视频</span>
+          </div>
+          <p class="footer-desc">内容覆盖2022年3月至2026年11月的剧情长片、迷你剧、独立短片和纪录片四类条目，按周更新点播榜与用户短评，每月整理一次导演访谈与映后问答。</p>
+        </div>
+        <div class="footer-col">
+          <h4>内容类型</h4>
+          <a href="#featured">剧情长片</a>
+          <a href="#featured">迷你剧</a>
+          <a href="#featured">独立短片</a>
+          <a href="#featured">纪录片</a>
+        </div>
+        <div class="footer-col">
+          <h4>发现</h4>
+          <a href="#ranking">本周点播榜</a>
+          <a href="#latest">最新更新</a>
+          <a href="#deep-dive">深度解析</a>
+          <a href="#news">相关资讯</a>
+        </div>
+        <div class="footer-col">
+          <h4>参与</h4>
+          <a href="#comments">用户短评</a>
+          <a href="#faq">常见问题</a>
+          <a href="#related">主题索引</a>
+          <a href="#featured">收藏片单</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 羞羞视频 · 内容聚合示例页面，条目与数据为演示用途</span>
+        <span>更新时间：2026年11月8日 · 对应正文更新项见「最新更新」板块</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 回到顶部 -->
+  <button class="back-top" id="backTop" aria-label="回到顶部">↑</button>
+
+  <!-- 结构化数据 -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "羞羞视频",
+    "description": "汇集剧情长片、迷你剧、独立短片与纪录片的内容聚合页面，提供分类筛选、深度解析、用户评论和片单推荐。",
+    "inLanguage": "zh-CN"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "《暗涌》第二季和第一季之间需要补看什么？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "第一季第6到8集的码头交易线是第二季的直接前情。第二季第1集开头用两分钟回顾了关键人物关系，没看第一季也能跟上，但第3集提到“那批货的编号”时不会解释来源。补看第6到8集大约需要2小时15分钟。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "迷你剧和短剧有什么区别？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "迷你剧一般指单季6到10集、有完整叙事弧的剧集，单集30到45分钟；短剧多为单集1到5分钟的竖屏内容，叙事靠密集反转推进。这里收录的《第七封信》《山雨》属于迷你剧，《沙漏》这类9到25分钟的作品归入独立短片，与短剧不是同一形态。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "纪录片《街角三年》的跟拍周期是多长？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "从2022年3月菜市场贴出改造通知开始，到2025年4月改造后重新开业满一年，实际跟拍周期约三年两个月。第2集里摊主老周拆招牌的画面拍于2023年11月拆迁当天，第3集重新开业的画面拍于2025年4月。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "《夜航》导演剪辑版多出来的23分钟在哪里？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "集中在两段：一是主角在加油站与夜班加油员的对话，约9分钟；二是修车铺里主角与老板娘的三段交谈，约14分钟。院线版把这两段全部剪掉，导演在映后谈里说当时是为了压缩到120分钟以内。剪辑版总时长142分钟。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "评分和热度哪个更能参考？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "评分反映已看观众的满意程度，热度反映点播量。评分高但热度低的条目，如《渡口》评分8.4、热度中等，说明看的人少但看完的人认可；热度高但评分中等的条目，如《红闸》热度8.3、评分未进前列，通常是有话题点但口碑分化。两个指标一起看，比只看一个更准。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "独立短片在哪里找同导演的其他作品？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "按导演名检索比按分类翻更有效。《流浪放映员》的导演此前还有一部18分钟的《收费站》，收录在同一导演条目下；《沙漏》的导演作品分散在实验短片分类里，按导演名能一次找全。平台目前没有单独的导演页，检索是主要入口。"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <script>
+    (function() {
+      // 搜索筛选
+      var searchInput = document.getElementById('searchInput');
+      var cards = document.querySelectorAll('.card');
+      var noResult = document.createElement('div');
+      noResult.className = 'no-result';
+      noResult.textContent = '没有找到匹配的条目，试试其他关键词';
+      var cardGrid = document.querySelector('.card-grid');
+      if (cardGrid && cardGrid.parentNode) {
+        cardGrid.parentNode.insertBefore(noResult, cardGrid.nextSibling);
+      }
+
+      function filterCards(query) {
+        if (!cards.length) return;
+        var q = query.trim().toLowerCase();
+        var visibleCount = 0;
+        cards.forEach(function(card) {
+          var text = card.textContent.toLowerCase();
+          if (!q || text.indexOf(q) !== -1) {
+            card.style.display = '';
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+        if (q && visibleCount === 0) {
+          noResult.classList.add('show');
+        } else {
+          noResult.classList.remove('show');
+        }
+      }
+
+      if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+          filterCards(e.target.value);
+        });
+      }
+
+      // 移动端菜单
+      var menuToggle = document.getElementById('menuToggle');
+      var mobileMenu = document.getElementById('mobileMenu');
+      var overlay = document.getElementById('overlay');
+      var mobileClose = document.getElementById('mobileClose');
+
+      function openMenu() {
+        mobileMenu.classList.add('open');
+        overlay.classList.add('active');
+        menuToggle.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeMenu() {
+        mobileMenu.classList.remove('open');
+        overlay.classList.remove('active');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+
+      if (menuToggle) {
+        menuToggle.addEventListener('click', function() {
+          if (mobileMenu.classList.contains('open')) {
+            closeMenu();
+          } else {
+            openMenu();
+          }
+        });
+      }
+
+      if (mobileClose) {
+        mobileClose.addEventListener('click', closeMenu);
+      }
+
+      if (overlay) {
+        overlay.addEventListener('click', closeMenu);
+      }
+
+      // 点击移动端导航后自动收起
+      var mobileLinks = mobileMenu.querySelectorAll('a');
+      mobileLinks.forEach(function(link) {
+        link.addEventListener('click', closeMenu);
+      });
+
+      // Esc 关闭菜单
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+          closeMenu();
+        }
+      });
+
+      // 回到顶部
+      var backTop = document.getElementById('backTop');
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > window.innerHeight) {
+          backTop.classList.add('show');
+        } else {
+          backTop.classList.remove('show');
+        }
+      });
+
+      backTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // 侧栏导航高亮（简化版）
+      var sidebarLinks = document.querySelectorAll('.channel-sidebar a');
+      var sections = [];
+      sidebarLinks.forEach(function(link) {
+        var id = link.getAttribute('href');
+        if (id && id.startsWith('#')) {
+          var el = document.querySelector(id);
+          if (el) sections.push({ link: link, el: el });
+        }
+      });
+
+      if (sections.length) {
+        window.addEventListener('scroll', function() {
+          var scrollPos = window.scrollY + 120;
+          var current = null;
+          sections.forEach(function(s) {
+            if (s.el.offsetTop <= scrollPos) {
+              current = s;
+            }
+          });
+          sidebarLinks.forEach(function(l) {
+            l.style.background = '';
+            l.style.color = '';
+          });
+          if (current) {
+            current.link.style.background = 'var(--surface-alt)';
+            current.link.style.color = 'var(--primary)';
+          }
+        });
+      }
+    })();
+  </script>
+</body>
+      </html>
