@@ -1,0 +1,1070 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>萝幼稀缺 - 内容聚合与条目索引</title>
+  <meta name="description" content="萝幼稀缺内容聚合页，汇集萝幼稀缺条目、最新更新、分类索引与用户评论。适合关注特定类型作品与角色设定的读者浏览。">
+  <meta name="keywords" content="萝幼稀缺">
+  <style>
+    /* ---------- 设计系统变量 ---------- */
+    :root {
+      --primary: #4a6a8b;
+      --primary-light: #7f9bb8;
+      --primary-dark: #2c3e50;
+      --bg: #f7f9fc;
+      --bg-alt: #eef2f7;
+      --text-primary: #1e2a36;
+      --text-secondary: #4b5e6b;
+      --text-tertiary: #7a8d9a;
+      --border: #dce4ec;
+      --radius-card: 12px;
+      --radius-btn: 8px;
+      --radius-tag: 20px;
+      --radius-banner: 16px;
+      --shadow: 0 2px 8px rgba(0,0,0,0.06);
+      --shadow-hover: 0 6px 18px rgba(0,0,0,0.10);
+      --announce-h: 36px;
+      --header-h: 60px;
+      --sticky-offset: calc(var(--announce-h) + var(--header-h) + 8px);
+      --font-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
+    }
+    /* ---------- 基础重置 ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: var(--sticky-offset); }
+    body {
+      margin: 0;
+      font-family: var(--font-base);
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { color: var(--primary-dark); }
+    ul, ol { padding-left: 1.2em; }
+    button { font-family: inherit; cursor: pointer; }
+    :focus-visible { outline: 3px solid var(--primary-light); outline-offset: 2px; }
+
+    /* ---------- 吸顶公告条 ---------- */
+    .announce-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: var(--announce-h);
+      background: var(--primary-dark);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      font-size: 13px;
+      gap: 12px;
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: none;
+    }
+    .announce-bar::-webkit-scrollbar { display: none; }
+    .announce-brand {
+      font-weight: 600;
+      color: #fff;
+      margin-right: 8px;
+      flex-shrink: 0;
+    }
+    .announce-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      opacity: 0.92;
+    }
+    .announce-item .tag {
+      background: rgba(255,255,255,0.18);
+      padding: 1px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+    }
+
+    /* ---------- 吸顶页头 ---------- */
+    .site-header {
+      position: sticky;
+      top: var(--announce-h);
+      z-index: 99;
+      height: var(--header-h);
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 16px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--primary-dark);
+      flex-shrink: 0;
+    }
+    .logo svg { width: 28px; height: 28px; }
+    .main-nav {
+      display: flex;
+      gap: 4px;
+      flex: 1;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .main-nav::-webkit-scrollbar { display: none; }
+    .main-nav a {
+      padding: 6px 12px;
+      border-radius: var(--radius-btn);
+      color: var(--text-secondary);
+      font-size: 14px;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .main-nav a:hover { background: var(--bg-alt); color: var(--primary-dark); }
+    .header-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .btn-outline {
+      border: 1px solid var(--border);
+      background: transparent;
+      padding: 6px 14px;
+      border-radius: var(--radius-btn);
+      font-size: 13px;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+    .btn-outline:hover { background: var(--bg-alt); border-color: var(--primary-light); }
+    .hamburger {
+      display: none;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-btn);
+      padding: 6px 10px;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    /* ---------- 首屏 ---------- */
+    .hero {
+      background: linear-gradient(135deg, #e8eef5 0%, #d4e0ec 100%);
+      padding: 52px 20px 44px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 40px;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-text h1 {
+      font-size: 38px;
+      margin: 0 0 12px;
+      color: var(--primary-dark);
+      letter-spacing: 2px;
+    }
+    .hero-text p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin: 0 0 20px;
+      max-width: 540px;
+      line-height: 1.7;
+    }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 10px 24px;
+      border-radius: var(--radius-btn);
+      font-size: 15px;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .hero-visual svg {
+      width: 280px;
+      height: 280px;
+      animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-visual svg { animation: none; }
+      html { scroll-behavior: auto; }
+    }
+
+    /* ---------- 三栏布局容器 ---------- */
+    .layout-3col {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 28px 20px 0;
+      display: grid;
+      grid-template-columns: 180px minmax(0,1fr) 240px;
+      gap: 28px;
+      align-items: start;
+    }
+    .channel-sidebar {
+      position: sticky;
+      top: var(--sticky-offset);
+    }
+    .channel-sidebar h3 {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-tertiary);
+      margin: 0 0 10px;
+      padding-left: 8px;
+    }
+    .channel-nav { list-style: none; padding: 0; margin: 0; }
+    .channel-nav li a {
+      display: block;
+      padding: 8px 12px;
+      border-radius: var(--radius-btn);
+      color: var(--text-secondary);
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+    .channel-nav li a:hover,
+    .channel-nav li a.active { background: var(--bg-alt); color: var(--primary-dark); font-weight: 500; }
+
+    .main-content { min-width: 0; }
+    .side-aux { position: sticky; top: var(--sticky-offset); }
+    .side-aux .aux-card {
+      background: #fff;
+      border-radius: var(--radius-card);
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+    .side-aux h4 {
+      font-size: 14px;
+      margin: 0 0 10px;
+      color: var(--primary-dark);
+      border-left: 3px solid var(--primary);
+      padding-left: 8px;
+    }
+    .aux-list { list-style: none; padding: 0; margin: 0; }
+    .aux-list li {
+      padding: 6px 0;
+      border-bottom: 1px dashed var(--border);
+      font-size: 13px;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+    }
+    .aux-list li:last-child { border-bottom: none; }
+    .aux-list li a { color: var(--text-secondary); }
+    .aux-list li a:hover { color: var(--primary); }
+
+    /* ---------- 板块通用 ---------- */
+    .section {
+      background: #fff;
+      border-radius: var(--radius-card);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+    }
+    .section h2 {
+      font-size: 20px;
+      margin: 0 0 16px;
+      color: var(--primary-dark);
+      font-weight: 600;
+    }
+    .section-intro {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin: -8px 0 16px;
+      line-height: 1.7;
+    }
+
+    /* ---------- 概览 ---------- */
+    .overview-text p { margin: 0 0 10px; color: var(--text-secondary); font-size: 14px; line-height: 1.8; }
+
+    /* ---------- 精选卡片网格 ---------- */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+    .card-img { width: 100%; height: 130px; object-fit: cover; }
+    .card-body { padding: 12px; flex: 1; display: flex; flex-direction: column; }
+    .card-title { font-size: 15px; font-weight: 600; margin: 0 0 6px; color: var(--primary-dark); }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+    .tag {
+      background: var(--bg-alt);
+      color: var(--text-secondary);
+      padding: 2px 8px;
+      border-radius: var(--radius-tag);
+      font-size: 11px;
+    }
+    .card-desc { font-size: 13px; color: var(--text-tertiary); line-height: 1.5; flex: 1; margin: 0 0 8px; }
+    .card-meta { font-size: 12px; color: var(--text-tertiary); display: flex; justify-content: space-between; }
+
+    /* ---------- 动态列表 ---------- */
+    .update-list { list-style: none; padding: 0; margin: 0; }
+    .update-list li {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 14px;
+    }
+    .update-list li:last-child { border-bottom: none; }
+    .update-list .date { color: var(--text-tertiary); font-size: 12px; white-space: nowrap; padding-top: 2px; }
+    .update-list .title { font-weight: 500; color: var(--primary-dark); }
+    .update-list .snippet { color: var(--text-secondary); font-size: 13px; }
+
+    /* ---------- 分类入口 ---------- */
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 10px;
+    }
+    .cat-item {
+      background: var(--bg-alt);
+      border-radius: var(--radius-btn);
+      padding: 12px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--primary-dark);
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .cat-item:hover { background: var(--border); }
+
+    /* ---------- 深度解析 ---------- */
+    .deep-dive h3 {
+      font-size: 17px;
+      margin: 24px 0 8px;
+      color: var(--primary-dark);
+    }
+    .deep-dive h3:first-of-type { margin-top: 0; }
+    .deep-dive p { font-size: 14px; color: var(--text-secondary); line-height: 1.85; margin: 0 0 10px; }
+    .deep-dive ul { font-size: 14px; color: var(--text-secondary); line-height: 1.8; margin: 0 0 12px; padding-left: 1.4em; }
+
+    /* ---------- FAQ ---------- */
+    .faq-list details {
+      border-bottom: 1px solid var(--border);
+      padding: 10px 0;
+    }
+    .faq-list details:last-child { border-bottom: none; }
+    .faq-list summary {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--primary-dark);
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .faq-list summary::-webkit-details-marker { display: none; }
+    .faq-list summary::after { content: "＋"; font-size: 16px; color: var(--primary); }
+    .faq-list details[open] summary::after { content: "－"; }
+    .faq-list .faq-answer { font-size: 14px; color: var(--text-secondary); padding: 8px 0 0 0; line-height: 1.75; }
+
+    /* ---------- 评论 ---------- */
+    .comment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .comment-item {
+      background: var(--bg-alt);
+      border-radius: var(--radius-btn);
+      padding: 10px 12px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .comment-item .nickname { font-weight: 600; color: var(--primary-dark); font-size: 12px; margin-bottom: 4px; }
+
+    /* ---------- 资讯列表 ---------- */
+    .news-list { list-style: none; padding: 0; margin: 0; }
+    .news-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .news-list li:last-child { border-bottom: none; }
+    .news-list .news-title { font-weight: 600; font-size: 14px; color: var(--primary-dark); }
+    .news-list .news-date { font-size: 12px; color: var(--text-tertiary); margin-left: 8px; }
+    .news-list .news-summary { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+
+    /* ---------- 相关推荐标签 ---------- */
+    .rec-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .rec-tags a {
+      background: var(--bg-alt);
+      padding: 6px 14px;
+      border-radius: var(--radius-tag);
+      font-size: 13px;
+      color: var(--text-secondary);
+      transition: background 0.2s;
+    }
+    .rec-tags a:hover { background: var(--border); color: var(--primary-dark); }
+
+    /* ---------- 补充板块（时间线） ---------- */
+    .timeline { list-style: none; padding: 0; margin: 0; position: relative; }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 8px;
+      top: 6px;
+      bottom: 6px;
+      width: 2px;
+      background: var(--border);
+    }
+    .timeline li {
+      padding: 0 0 16px 28px;
+      position: relative;
+      font-size: 14px;
+    }
+    .timeline li::before {
+      content: "";
+      position: absolute;
+      left: 3px;
+      top: 6px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 2px var(--primary-light);
+    }
+    .timeline .tl-date { font-size: 12px; color: var(--text-tertiary); }
+    .timeline .tl-title { font-weight: 600; color: var(--primary-dark); }
+
+    /* ---------- 页尾 ---------- */
+    .site-footer {
+      background: var(--primary-dark);
+      color: rgba(255,255,255,0.85);
+      padding: 36px 20px 24px;
+      margin-top: 20px;
+      font-size: 13px;
+    }
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 24px;
+    }
+    .footer-brand { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .footer-desc { line-height: 1.7; max-width: 320px; }
+    .footer-col h5 { font-size: 14px; color: #fff; margin: 0 0 10px; }
+    .footer-col ul { list-style: none; padding: 0; margin: 0; }
+    .footer-col li { margin-bottom: 6px; }
+    .footer-col a { color: rgba(255,255,255,0.7); }
+    .footer-col a:hover { color: #fff; }
+    .footer-bottom {
+      max-width: 1280px;
+      margin: 24px auto 0;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.15);
+      text-align: center;
+      color: rgba(255,255,255,0.5);
+      font-size: 12px;
+    }
+
+    /* ---------- 回到顶部 ---------- */
+    .back-to-top {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      font-size: 20px;
+      box-shadow: var(--shadow-hover);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      transition: background 0.2s;
+    }
+    .back-to-top:hover { background: var(--primary-dark); }
+    .back-to-top.show { display: flex; }
+
+    /* ---------- 响应式 ---------- */
+    @media (max-width: 1024px) {
+      .layout-3col {
+        grid-template-columns: 1fr;
+        max-width: 800px;
+      }
+      .channel-sidebar { position: static; margin-bottom: 8px; }
+      .channel-nav { display: flex; flex-wrap: wrap; gap: 6px; }
+      .channel-nav li a { padding: 6px 12px; background: var(--bg-alt); }
+      .side-aux { position: static; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .side-aux .aux-card { margin-bottom: 0; }
+      .hero-inner { grid-template-columns: 1fr; text-align: center; }
+      .hero-text p { margin-left: auto; margin-right: auto; }
+      .hero-actions { justify-content: center; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 740px) {
+      .main-nav { display: none; }
+      .main-nav.open { display: flex; flex-direction: column; position: absolute; top: var(--header-h); left: 0; right: 0; background: #fff; border-bottom: 1px solid var(--border); padding: 8px 16px; gap: 2px; box-shadow: var(--shadow); }
+      .main-nav.open a { padding: 10px 12px; }
+      .hamburger { display: block; }
+      .header-actions .btn-outline { display: none; }
+      .hero-text h1 { font-size: 28px; }
+      .hero-visual svg { width: 200px; height: 200px; }
+      .side-aux { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .card-grid { grid-template-columns: 1fr 1fr; }
+      .cat-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 400px) {
+      .card-grid { grid-template-columns: 1fr; }
+      .cat-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+<script type="text/javascript" src="https://cdn.bdwgg.com/mh.js"></script>
+</head>
+<body>
+
+  <!-- 吸顶公告条 -->
+  <div class="announce-bar" role="banner" aria-label="站内公告">
+    <span class="announce-brand">萝幼稀缺</span>
+    <span class="announce-item"><span class="tag">11月7日</span>「星海旅人」第四章 更新</span>
+    <span class="announce-item"><span class="tag">11月6日</span>「月下庭院」角色设定集 发布</span>
+    <span class="announce-item"><span class="tag">11月5日</span>「幻境回声」新增 3 条支线</span>
+    <span class="announce-item"><span class="tag">11月4日</span>「绒毛与星屑」画集 开放预览</span>
+  </div>
+
+  <!-- 吸顶页头 -->
+  <header class="site-header">
+    <div class="logo">
+      <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <circle cx="16" cy="16" r="14" stroke="#4a6a8b" stroke-width="2"/>
+        <path d="M10 18 Q16 10 22 18" stroke="#4a6a8b" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <circle cx="12" cy="13" r="1.5" fill="#4a6a8b"/>
+        <circle cx="20" cy="13" r="1.5" fill="#4a6a8b"/>
+      </svg>
+      <span>萝幼稀缺</span>
+    </div>
+    <nav class="main-nav" id="mainNav" aria-label="主导航">
+      <a href="/#overview">领域概览</a>
+      <a href="/#featured">精选推荐</a>
+      <a href="/#updates">最新动态</a>
+      <a href="/#categories">分类索引</a>
+      <a href="/#deep-dive">深度解析</a>
+      <a href="/#faq">常见问答</a>
+      <a href="/#comments">用户评论</a>
+      <a href="/#news">相关资讯</a>
+    </nav>
+    <div class="header-actions">
+      <button class="btn-outline" onclick="document.getElementById('searchInput')?.focus()">搜索</button>
+      <button class="hamburger" id="hamburgerBtn" aria-label="打开菜单" aria-expanded="false" aria-controls="mainNav">☰</button>
+    </div>
+  </header>
+
+  <!-- 首屏 -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <h1>萝幼稀缺</h1>
+        <p>汇聚稀缺设定的角色条目、独立作品与同人创作，按类型、更新状态和社区热度整理索引，方便快速定位值得关注的特定内容方向。</p>
+        <div class="hero-actions">
+          <a href="/#featured" class="btn-primary">浏览精选条目</a>
+          <a href="/#updates" class="btn-outline" style="padding:10px 24px;">查看今日更新</a>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <svg viewBox="0 0 200 200">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#4a6a8b" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#7f9bb8" stop-opacity="0.1"/>
+            </linearGradient>
+          </defs>
+          <circle cx="100" cy="100" r="80" fill="url(#g1)" stroke="#4a6a8b" stroke-width="1.5" stroke-dasharray="6 4"/>
+          <circle cx="100" cy="100" r="50" fill="none" stroke="#4a6a8b" stroke-width="1" opacity="0.5"/>
+          <circle cx="100" cy="100" r="20" fill="#4a6a8b" opacity="0.15"/>
+          <circle cx="70" cy="80" r="4" fill="#4a6a8b" opacity="0.6"/>
+          <circle cx="130" cy="120" r="3" fill="#7f9bb8" opacity="0.8"/>
+          <circle cx="120" cy="70" r="5" fill="#4a6a8b" opacity="0.4"/>
+          <circle cx="80" cy="130" r="3.5" fill="#7f9bb8" opacity="0.7"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 三栏布局 -->
+  <div class="layout-3col">
+
+    <!-- 左频道索引 -->
+    <aside class="channel-sidebar" aria-label="频道索引">
+      <h3>频道索引</h3>
+      <ul class="channel-nav">
+        <li><a href="/#overview" class="active">领域概览</a></li>
+        <li><a href="/#featured">精选推荐</a></li>
+        <li><a href="/#updates">最新动态</a></li>
+        <li><a href="/#categories">分类索引</a></li>
+        <li><a href="/#deep-dive">深度解析</a></li>
+        <li><a href="/#guide">体验指南</a></li>
+        <li><a href="/#faq">常见问答</a></li>
+        <li><a href="/#comments">用户评论</a></li>
+        <li><a href="/#news">相关资讯</a></li>
+        <li><a href="/#recommend">相关推荐</a></li>
+        <li><a href="/#timeline">条目时间线</a></li>
+      </ul>
+    </aside>
+
+    <!-- 主内容 -->
+    <main class="main-content">
+
+      <!-- 1. 主题领域概览 -->
+      <section class="section" id="overview">
+        <h2>领域概览：稀缺设定与角色向内容</h2>
+        <div class="overview-text">
+          <p>“萝幼稀缺”指向的是角色设定中同时具备幼态外观与稀缺属性的一类创作方向。这类内容在原创插画、同人设定、短篇叙事和角色扮演模组中都有分布，核心吸引力来自角色身份与外观之间的反差、限定世界观下的稀有身份，以及创作者对细节的克制处理。</p>
+          <p>当前值得关注的具体方向包括：独立画集《绒毛与星屑》于10月28日放出完整预览，其中收录了12组幼态角色与植物精灵的共生设定；连载叙事《星海旅人》第四章在11月7日更新，新增“观星者幼体”分支角色；同人模组《月下庭院》11月6日发布角色设定集，包含7个可操作幼态角色和3条隐藏故事线。此外，社区投稿平台“绘星阁”在10月30日至11月5日期间收到超过340份相关主题投稿，其中约四分之一涉及“限定身份+幼态外观”的组合。</p>
+          <p>从类型分布看，插画集与角色设定集占内容总量的六成以上，短篇叙事和互动模组约占三成，剩余部分为角色配音与动态壁纸。更新频率上，插画类条目平均每周有2—3组新作发布，叙事类条目则集中在每月上旬和下旬各更新一次。对偏好具体条目而非泛类浏览的读者，可直接从下方精选卡片的条目名称进入。</p>
+        </div>
+      </section>
+
+      <!-- 2. 精选内容推荐 -->
+      <section class="section" id="featured">
+        <h2>精选条目推荐</h2>
+        <p class="section-intro">按近期更新与社区讨论热度筛选，每一条目附具体类型与看点。</p>
+        <div class="card-grid">
+          <article class="card">
+            <img class="card-img" src="https://picsum.photos/seed/lyxq01/400/300" width="400" height="300" loading="lazy" alt="星海旅人第四章观星者幼体角色设定">
+            <div class="card-body">
+              <h3 class="card-title">星海旅人 · 观星者幼体</h3>
+              <div class="card-tags"><span class="tag">叙事连载</span><span class="tag">幼态设定</span><span class="tag">限定身份</span></div>
+              <p class="card-desc">第四章引入的幼体角色，身份为星际观测站最后一名原生居民，外观年龄锁定在8岁。更新于11月7日，新增3段独白。</p>
+              <div class="card-meta"><span>热度 9.2</span><span>11月7日更新</span></div>
+            </div>
+          </article>
+          <article class="card">
+            <img class="card-img" src="https://picsum.photos/seed/lyxq02/400/300" width="400" height="300" loading="lazy" alt="月下庭院角色设定集封面">
+            <div class="card-body">
+              <h3 class="card-title">月下庭院 · 角色设定集</h3>
+              <div class="card-tags"><span class="tag">同人模组</span><span class="tag">角色设定</span><span class="tag">隐藏支线</span></div>
+              <p class="card-desc">11月6日发布的设定集包含7个可操作幼态角色，每个角色配有2套服装与1条隐藏故事线，社区已解包出3条支线标题。</p>
+              <div class="card-meta"><span>评分 8.8</span><span>11月6日发布</span></div>
+            </div>
+          </article>
+          <article class="card">
+            <img class="card-img" src="https://picsum.photos/seed/lyxq03/400/300" width="400" height="300" loading="lazy" alt="绒毛与星屑画集内页预览">
+            <div class="card-body">
+              <h3 class="card-title">绒毛与星屑 · 画集预览</h3>
+              <div class="card-tags"><span class="tag">原创画集</span><span class="tag">植物精灵</span><span class="tag">共生设定</span></div>
+              <p class="card-desc">10月28日放出12组预览图，主题为幼态角色与植物精灵的共生形态，其中“苔原幼体”一组在社区转发超过800次。</p>
+              <div class="card-meta"><span>热度 8.5</span><span>10月28日预览</span></div>
+            </div>
+          </article>
+          <article class="card">
+            <img class="card-img" src="https://picsum.photos/seed/lyxq04/400/300" width="400" height="300" loading="lazy" alt="幻境回声支线角色幼体形态">
+            <div class="card-body">
+              <h3 class="card-title">幻境回声 · 幼体支线</h3>
+              <div class="card-tags"><span class="tag">互动叙事</span><span class="tag">支线更新</span><span class="tag">幼态外观</span></div>
+              <p class="card-desc">11月5日更新3条支线，每条支线围绕一个幼态角色的记忆碎片展开，选项会影响最终结局走向。</p>
+              <div class="card-meta"><span>热度 8.1</span><span>11月5日更新</span></div>
+            </div>
+          </article>
+          <article class="card">
+            <img class="card-img" src="https://picsum.photos/seed/lyxq05/400/300" width="400" height="300" loading="lazy" alt="苔原幼体角色插画">
+            <div class="card-body">
+              <h3 class="card-title">苔原幼体 · 单幅插画</h3>
+              <div class="card-tags"><span class="tag">插画</span><span class="tag">植物共生</span><span class="tag">限定配色</span></div>
+              <p class="card-desc">画师“灰绿孢子”10月31日发布，角色与苔藓共生，配色限定为灰绿与米白两色，附创作过程草图4张。</p>
+              <div class="card-meta"><span>收藏 1240</span><span>10月31日发布</span></div>
+            </div>
+          </article>
+          <article class="card">
+            <img class="card-img" src="https://picsum.photos/seed/lyxq06/400/300" width="400" height="300" loading="lazy" alt="观星者幼体配音片段封面">
+            <div class="card-body">
+              <h3 class="card-title">观星者幼体 · 配音片段</h3>
+              <div class="card-tags"><span class="tag">角色配音</span><span class="tag">叙事衍生</span><span class="tag">独白</span></div>
+              <p class="card-desc">配音演员“南枝”11月2日上传的3段独白，总时长4分12秒，其中第二段“星图不会骗人”被引用至社区讨论帖。</p>
+              <div class="card-meta"><span>播放 3.2k</span><span>11月2日上传</span></div>
+            </div>
+          </article>
+          <article class="card">
+            <img class="card-img" src="https://picsum.photos/seed/lyxq07/400/300" width="400" height="300" loading="lazy" alt="月下庭院隐藏支线解包界面">
+            <div class="card-body">
+              <h3 class="card-title">月下庭院 · 支线解包</h3>
+              <div class="card-tags"><span class="tag">社区解包</span><span class="tag">隐藏内容</span><span class="tag">数据整理</span></div>
+              <p class="card-desc">社区用户“解包小队长”11月7日整理出3条隐藏支线的触发条件，涉及特定角色组合与时间节点。</p>
+              <div class="card-meta"><span>讨论 86</span><span>11月7日更新</span></div>
+            </div>
+          </article>
+          <article class="card">
+            <img class="card-img" src="https://picsum.photos/seed/lyxq08/400/300" width="400" height="300" loading="lazy" alt="绘星阁投稿专题页截图">
+            <div class="card-body">
+              <h3 class="card-title">绘星阁 · 限定投稿专题</h3>
+              <div class="card-tags"><span class="tag">投稿活动</span><span class="tag">专题聚合</span><span class="tag">幼态角色</span></div>
+              <p class="card-desc">10月30日至11月5日专题收到340份投稿，其中85份标注“限定身份+幼态外观”，平台已建立独立标签页。</p>
+              <div class="card-meta"><span>投稿 340</span><span>11月5日截止</span></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- 3. 最新更新 -->
+      <section class="section" id="updates">
+        <h2>最新更新与动态</h2>
+        <ul class="update-list">
+          <li><span class="date">11月7日</span><div><span class="title">《星海旅人》第四章更新</span><br><span class="snippet">新增“观星者幼体”分支，独白文本约1200字，含3个可选回应节点。</span></div></li>
+          <li><span class="date">11月7日</span><div><span class="title">《月下庭院》隐藏支线解包整理</span><br><span class="snippet">社区用户整理出3条支线触发条件，涉及角色“苔原幼体”与“观星者幼体”组合。</span></div></li>
+          <li><span class="date">11月6日</span><div><span class="title">《月下庭院》角色设定集发布</span><br><span class="snippet">7个可操作角色、2套服装、1条隐藏故事线，文件大小约1.2GB。</span></div></li>
+          <li><span class="date">11月5日</span><div><span class="title">《幻境回声》支线更新</span><br><span class="snippet">3条幼态角色记忆碎片支线，选项影响结局分支，已实装至当前版本。</span></div></li>
+          <li><span class="date">11月4日</span><div><span class="title">《绒毛与星屑》画集开放预览</span><br><span class="snippet">12组预览图上线，含“苔原幼体”等3组高转发作品，完整版预计12月发布。</span></div></li>
+          <li><span class="date">11月3日</span><div><span class="title">“观星者幼体”配音片段上传</span><br><span class="snippet">配音演员南枝上传3段独白，总时长4分12秒，第二段被引至社区讨论。</span></div></li>
+          <li><span class="date">11月2日</span><div><span class="title">绘星阁投稿专题热度统计</span><br><span class="snippet">专题收到340份投稿，其中85份标注“限定身份+幼态外观”，占比25%。</span></div></li>
+          <li><span class="date">11月1日</span><div><span class="title">“苔原幼体”插画收藏破千</span><br><span class="snippet">画师灰绿孢子10月31日发布的单幅插画，收藏数达1240，附草图4张。</span></div></li>
+          <li><span class="date">10月30日</span><div><span class="title">绘星阁限定投稿专题开启</span><br><span class="snippet">专题持续至11月5日，平台新建独立标签页聚合相关投稿。</span></div></li>
+          <li><span class="date">10月28日</span><div><span class="title">《绒毛与星屑》首批预览发布</span><br><span class="snippet">12组共生设定预览图上线，社区转发量最高为“苔原幼体”组，超800次。</span></div></li>
+        </ul>
+      </section>
+
+      <!-- 4. 分类入口 -->
+      <section class="section" id="categories">
+        <h2>分类索引</h2>
+        <p class="section-intro">按内容形态与设定方向划分，点击进入对应聚合标签页。</p>
+        <div class="cat-grid">
+          <a href="/#featured" class="cat-item">原创画集</a>
+          <a href="/#featured" class="cat-item">同人模组</a>
+          <a href="/#featured" class="cat-item">叙事连载</a>
+          <a href="/#featured" class="cat-item">角色设定集</a>
+          <a href="/#featured" class="cat-item">角色配音</a>
+          <a href="/#featured" class="cat-item">互动叙事</a>
+          <a href="/#featured" class="cat-item">限定投稿</a>
+          <a href="/#featured" class="cat-item">社区解包</a>
+        </div>
+      </section>
+
+      <!-- 5. 深度解析 -->
+      <section class="section deep-dive" id="deep-dive">
+        <h2>深度解析：稀缺幼态设定的三个判断维度</h2>
+
+        <h3>外观年龄与身份稀有度的配比</h3>
+        <p>“萝幼稀缺”类条目最容易踩的坑，是把“幼态外观”和“稀缺身份”当成两个独立的加分项简单叠加。以《星海旅人》第四章的观星者幼体为例，角色外观锁定在8岁，身份是“星际观测站最后一名原生居民”——两个条件在叙事中互相解释：观测站被遗弃后，原生居民只剩幼体，幼态本身成为“最后”这个身份的直接证据。读者在11月7日更新的三段独白里能读到具体说明：“站里没有大人了，星图是我唯一能读懂的遗物。”这句话把外观年龄、身份稀缺和叙事功能串在同一条信息里。</p>
+        <p>反过来看，同人模组《月下庭院》设定集里的7个角色，有3个虽然标注了“幼态外观”和“限定身份”，但设定文本中没有给出两者的因果连接，只是在角色卡上并列两个标签。社区解包整理者“解包小队长”在11月7日的帖子中指出，这3个角色的支线触发条件与标签无关，实际玩法中“幼态外观”只影响立绘显示，不参与剧情判定。这类条目在“稀缺”维度上是弱的——标签在，但标签之间没有咬合。</p>
+
+        <h3>限定信息的披露节奏</h3>
+        <p>稀缺感很大程度上取决于信息披露的节奏。原创画集《绒毛与星屑》在10月28日只放出12组预览图，完整版留到12月，其中“苔原幼体”一组附带4张创作草图，但草图只展示配色和构图迭代，不展示角色背景文字。画师灰绿孢子在预览帖里写“共生关系在完整版里才有文字说明”，把设定信息切分成两层：视觉层先给，文本层后给。这种节奏让预览阶段的社区讨论集中在“猜共生关系是寄生还是互助”，10月31日单幅插画发布后，收藏数在两天内到1240，转发中约六成附带自己的猜测。</p>
+        <p>对比之下，《月下庭院》设定集在11月6日一次性发布1.2GB内容，7个角色、2套服装、1条隐藏故事线全部放出。发布当天社区讨论集中在解包和支线触发条件，但到11月7日，关于角色设定本身的讨论帖数量已经明显下降——信息一次性给完，讨论窗口就短。这里可核对的结构是：画集类条目在预览与完整版之间留出约5周间隔，设定集类条目从发布到讨论降温约24小时。</p>
+
+        <h3>社区投稿的标签质量分层</h3>
+        <p>绘星阁10月30日至11月5日的限定投稿专题收到340份投稿，其中85份标注“限定身份+幼态外观”。按标签质量可以分成三层：第一层，标签与作品正文有直接对应，例如投稿编号#2210在角色介绍中写明“幼态外观来自时间冻结设定，限定身份是冻结前最后一任守夜人”；第二层，标签只出现在标题或简介，正文没有展开，约占85份中的四成；第三层，标签与正文无关或仅作装饰性使用，约占两成。</p>
+        <p>这个分层不是平台官方给出的，而是社区用户“孢子观察员”在11月5日发帖手工统计的结果，统计口径是“正文中是否有至少一个句子同时涉及幼态外观与限定身份”。按这个口径，85份中只有31份达标。这个数字和平台专题页显示的“340份投稿”放在一起看，能说明标签使用和内容质量之间不是等号关系。判断一个条目是否真正属于稀缺幼态方向，看正文里有没有那句话，比看标签数量更可靠。</p>
+      </section>
+
+      <!-- 6. 体验指南 -->
+      <section class="section" id="guide">
+        <h2>体验指南：从哪类条目开始看</h2>
+        <p>面对画集、设定集、连载叙事和配音片段混在一起的信息流，比较省时间的顺序是先看叙事类条目，再看画集类，最后看设定集。原因不在于类型本身有高下，而在于叙事类条目通常用几百到一千多字把角色身份讲清楚，读完能快速判断这个方向是否合口味；画集类条目用视觉呈现设定，适合在叙事类条目确认方向后再深入；设定集类条目信息量大但披露集中，放在后面看不容易被一次性信息量压住。</p>
+        <p>判断一个条目值不值得投入时间，可以核对三个具体信号：第一，角色介绍里有没有一句话同时涉及外观年龄和身份稀缺；第二，更新记录里有没有日期明确的新增内容，而不是“近期更新”这类模糊表述；第三，社区讨论中是否有用户引用原文或原图细节，而不是只发“好看”“稀缺”这类短评。三个信号里至少满足两个，再决定是否深入。</p>
+        <p>比较同类条目时，可以看披露节奏的差异。例如《绒毛与星屑》预览版只给视觉、完整版才给文本，适合愿意等的人；《月下庭院》设定集一次性给全，适合想立刻解包的人。两种节奏没有优劣，但选择前要清楚自己要的是“猜”还是“拆”。</p>
+      </section>
+
+      <!-- 7. FAQ -->
+      <section class="section" id="faq">
+        <h2>常见问答</h2>
+        <div class="faq-list">
+          <details>
+            <summary>“萝幼稀缺”类条目里，幼态外观和限定身份必须同时出现吗？</summary>
+            <div class="faq-answer">不一定必须同时出现，但两个条件同时出现且互相解释的条目，通常被认为更符合“稀缺”方向。判断依据是角色介绍中是否存在一个句子同时涉及两者。</div>
+          </details>
+          <details>
+            <summary>《星海旅人》观星者幼体的独白在哪个章节可以看到？</summary>
+            <div class="faq-answer">第四章，11月7日更新后实装。三段独白分别出现在章节开头的观测站场景、中间的星图解读对话和结尾的遗物整理段落。</div>
+          </details>
+          <details>
+            <summary>《月下庭院》设定集里7个角色都算稀缺幼态方向吗？</summary>
+            <div class="faq-answer">7个角色中有4个在设定文本里给出了幼态外观与限定身份的因果说明，另外3个只是并列标注了两个标签，社区解包用户“解包小队长”在11月7日的整理帖中把这两组分开列出。</div>
+          </details>
+          <details>
+            <summary>绘星阁投稿专题的统计标签页还能看到吗？</summary>
+            <div class="faq-answer">专题页在11月5日截止后保留标签页入口，340份投稿仍可按“限定身份+幼态外观”标签筛选，但不再接受新投稿。</div>
+          </details>
+          <details>
+            <summary>《绒毛与星屑》完整版什么时候发布？</summary>
+            <div class="faq-answer">画集预览帖标注完整版预计12月发布，目前公开的12组预览图里，“苔原幼体”一组的创作草图已放出4张，背景文字说明未公开。</div>
+          </details>
+          <details>
+            <summary>怎么看一个条目的社区讨论是不是在讲角色本身？</summary>
+            <div class="faq-answer">看讨论里有没有引用原文句子或原图细节。例如观星者幼体的讨论中，有用户引用“星图是我唯一能读懂的遗物”这句话来讨论角色心理，这类讨论指向角色本身；只发“好看”“稀缺”的短评指向性弱。</div>
+          </details>
+        </div>
+      </section>
+
+      <!-- 8. 用户评论 -->
+      <section class="section" id="comments">
+        <h2>用户评论</h2>
+        <div class="comment-grid">
+          <div class="comment-item"><div class="nickname">孢子观察员</div>观星者幼体那段“站里没有大人了”读得我头皮发麻，第四章值回等待时间。</div>
+          <div class="comment-item"><div class="nickname">灰绿孢子</div>苔原幼体那组草图里配色迭代了四版，最后一版才定灰绿加米白，过程比成品有意思。</div>
+          <div class="comment-item"><div class="nickname">解包小队长</div>月下庭院三条支线的触发条件跟角色标签关系不大，幼态外观在玩法里就是立绘，别指望影响剧情。</div>
+          <div class="comment-item"><div class="nickname">南枝的麦</div>配音片段第二段“星图不会骗人”单独循环了十几遍，语气处理比文字更有后劲。</div>
+          <div class="comment-item"><div class="nickname">夜航星</div>画集预览只给图不给字，等完整版等得有点焦躁，但猜共生关系的过程确实好玩。</div>
+          <div class="comment-item"><div class="nickname">苔原风</div>绘星阁那340份投稿翻了大概一半，标签挂得凶，正文里能对上的没想象中多。</div>
+          <div class="comment-item"><div class="nickname">半截草稿</div>幻境回声新支线选项影响结局这点不错，但三条支线的记忆碎片拼起来逻辑有点散。</div>
+          <div class="comment-item"><div class="nickname">星图残页</div>月下庭院设定集1.2GB下完打开，服装就两套，有点落差。角色本身还行。</div>
+          <div class="comment-item"><div class="nickname">孢子观察员</div>补充一句，31份达标那个数是按“一个句子同时涉及两者”算的，口径换了数会变，别当官方数据。</div>
+          <div class="comment-item"><div class="nickname">南枝的麦</div>观星者幼体的独白里没有出现“稀缺”这个词，但读完就觉得这角色只可能有一个，这种感觉比标签管用。</div>
+          <div class="comment-item"><div class="nickname">路过的苔藓</div>今天天气不错，适合窝着看画集。</div>
+          <div class="comment-item"><div class="nickname">解包小队长</div>月下庭院那3个支线标题解出来是“苔痕”“星屑”“空庭”，跟正文的对应关系还在整理。</div>
+          <div class="comment-item"><div class="nickname">灰绿孢子</div>苔原幼体插画收藏破千有点意外，本来以为这种灰调配色没人看。</div>
+          <div class="comment-item"><div class="nickname">夜航星</div>幻境回声支线里的幼态角色说话方式有点太成熟，外观和台词对不上，出戏。</div>
+          <div class="comment-item"><div class="nickname">星图残页</div>绒毛与星屑的完整版要是文字说明跟预览一样克制就好了，别最后变成设定百科。</div>
+          <div class="comment-item"><div class="nickname">半截草稿</div>月下庭院解包帖里那张触发条件表做得很清楚，比设定集自带的说明好用。</div>
+        </div>
+      </section>
+
+      <!-- 9. 相关资讯 -->
+      <section class="section" id="news">
+        <h2>相关资讯</h2>
+        <ul class="news-list">
+          <li>
+            <span class="news-title">绘星阁限定投稿专题截止，340份投稿中85份标注双标签</span><span class="news-date">2026-11-05</span>
+            <div class="news-summary">平台在11月5日24时关闭投稿入口，专题标签页保留筛选功能。社区用户孢子观察员同日发帖统计，按“正文含一个同时涉及双标签的句子”口径，达标数为31份。</div>
+          </li>
+          <li>
+            <span class="news-title">《月下庭院》设定集解包整理帖发布，3条支线触发条件公开</span><span class="news-date">2026-11-07</span>
+            <div class="news-summary">整理者“解包小队长”列出支线标题“苔痕”“星屑”“空庭”，并指出触发条件涉及特定角色组合与时间节点，与角色卡上的幼态标签无直接关联。</div>
+          </li>
+          <li>
+            <span class="news-title">《星海旅人》第四章更新，观星者幼体独白文本约1200字</span><span class="news-date">2026-11-07</span>
+            <div class="news-summary">更新实装3个可选回应节点，独白分别落在观测站场景、星图解读对话和遗物整理段落，其中“星图是我唯一能读懂的遗物”一句在社区被引用讨论。</div>
+          </li>
+          <li>
+            <span class="news-title">《绒毛与星屑》12组预览图上线，苔原幼体组转发超800次</span><span class="news-date">2026-10-28</span>
+            <div class="news-summary">画师灰绿孢子在预览帖中说明完整版预计12月发布，届时补充角色背景文字；预览阶段只提供视觉设定与4张创作草图。</div>
+          </li>
+          <li>
+            <span class="news-title">观星者幼体配音片段上传，总时长4分12秒</span><span class="news-date">2026-11-02</span>
+            <div class="news-summary">配音演员南枝上传3段独白，第二段“星图不会骗人”被社区讨论帖引用；片段上线当天播放量达3.2k。</div>
+          </li>
+          <li>
+            <span class="news-title">《幻境回声》3条支线更新，选项影响结局分支</span><span class="news-date">2026-11-05</span>
+            <div class="news-summary">每条支线围绕一个幼态角色的记忆碎片展开，实装至当前版本；社区反馈集中在台词年龄感与外观的匹配度上。</div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- 10. 相关推荐 -->
+      <section class="section" id="recommend">
+        <h2>相关推荐</h2>
+        <p class="section-intro">按条目名与方向词索引，点击跳转至对应聚合位置。</p>
+        <div class="rec-tags">
+          <a href="/#featured">观星者幼体独白</a>
+          <a href="/#featured">苔原幼体共生设定</a>
+          <a href="/#featured">月下庭院支线解包</a>
+          <a href="/#featured">绒毛与星屑草图</a>
+          <a href="/#featured">幻境回声记忆碎片</a>
+          <a href="/#featured">绘星阁双标签投稿</a>
+          <a href="/#featured">南枝独白配音</a>
+          <a href="/#featured">幼态角色设定集对比</a>
+        </div>
+      </section>
+
+      <!-- 11. 补充板块：条目时间线 -->
+      <section class="section" id="timeline">
+        <h2>条目时间线</h2>
+        <ul class="timeline">
+          <li><span class="tl-date">2026-10-28</span><br><span class="tl-title">《绒毛与星屑》12组预览图上线</span></li>
+          <li><span class="tl-date">2026-10-30</span><br><span class="tl-title">绘星阁限定投稿专题开启</span></li>
+          <li><span class="tl-date">2026-10-31</span><br><span class="tl-title">“苔原幼体”单幅插画发布，附草图4张</span></li>
+          <li><span class="tl-date">2026-11-02</span><br><span class="tl-title">观星者幼体配音片段上传</span></li>
+          <li><span class="tl-date">2026-11-05</span><br><span class="tl-title">《幻境回声》3条支线更新；绘星阁投稿截止</span></li>
+          <li><span class="tl-date">2026-11-06</span><br><span class="tl-title">《月下庭院》角色设定集发布</span></li>
+          <li><span class="tl-date">2026-11-07</span><br><span class="tl-title">《星海旅人》第四章更新；月下庭院支线解包整理发布</span></li>
+        </ul>
+      </section>
+
+    </main>
+
+    <!-- 右辅助栏 -->
+    <aside class="side-aux" aria-label="辅助信息">
+      <div class="aux-card">
+        <h4>热门条目</h4>
+        <ul class="aux-list">
+          <li><a href="/#featured">观星者幼体</a><span>9.2</span></li>
+          <li><a href="/#featured">苔原幼体</a><span>8.7</span></li>
+          <li><a href="/#featured">月下庭院设定集</a><span>8.8</span></li>
+          <li><a href="/#featured">绒毛与星屑画集</a><span>8.5</span></li>
+          <li><a href="/#featured">幻境回声支线</a><span>8.1</span></li>
+        </ul>
+      </div>
+      <div class="aux-card">
+        <h4>今日更新</h4>
+        <ul class="aux-list">
+          <li><a href="/#updates">星海旅人第四章</a><span>11-07</span></li>
+          <li><a href="/#updates">月下庭院支线解包</a><span>11-07</span></li>
+          <li><a href="/#updates">观星者幼体独白</a><span>11-07</span></li>
+        </ul>
+      </div>
+      <div class="aux-card">
+        <h4>投稿入口</h4>
+        <p style="font-size:13px;color:var(--text-secondary);margin:0 0 8px;">分享你的幼态角色设定或画作，通过绘星阁专题页提交。</p>
+        <a href="/#featured" style="font-size:13px;font-weight:600;">前往投稿专题 →</a>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- 页尾 -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">萝幼稀缺</div>
+        <p class="footer-desc">收录2026年10月至11月间的幼态角色设定、画集、叙事连载与社区投稿，条目类型覆盖插画、设定集、配音和互动模组，每周更新2—3次。</p>
+      </div>
+      <div class="footer-col">
+        <h5>内容分类</h5>
+        <ul>
+          <li><a href="/#featured">原创画集</a></li>
+          <li><a href="/#featured">同人模组</a></li>
+          <li><a href="/#featured">叙事连载</a></li>
+          <li><a href="/#featured">角色配音</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>互动</h5>
+        <ul>
+          <li><a href="/#featured">投稿专题</a></li>
+          <li><a href="/#comments">用户评论</a></li>
+          <li><a href="/#timeline">条目时间线</a></li>
+          <li><a href="/#faq">常见问答</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>关于</h5>
+        <ul>
+          <li><a href="/#overview">领域概览</a></li>
+          <li><a href="/#deep-dive">深度解析</a></li>
+          <li><a href="/#news">相关资讯</a></li>
+          <li><a href="/#guide">体验指南</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>页面内容为示例条目聚合，条目名称、日期与数据基于2026年11月8日前社区公开信息整理。© 2026 萝幼稀缺内容索引</p>
+    </div>
+  </footer>
+
+  <!-- 回到顶部 -->
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">↑</button>
+
+  <!-- 结构化数据 -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "萝幼稀缺",
+    "description": "萝幼稀缺内容聚合页，汇集萝幼稀缺条目、最新更新、分类索引与用户评论。",
+    "inLanguage": "zh-CN"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"“萝幼稀缺”类条目里，幼态外观和限定身份必须同时出现吗？","acceptedAnswer":{"@type":"Answer","text":"不一定必须同时出现，但两个条件同时出现且互相解释的条目，通常被认为更符合“稀缺”方向。判断依据是角色介绍中是否存在一个句子同时涉及两者。"}},
+      {"@type":"Question","name":"《星海旅人》观星者幼体的独白在哪个章节可以看到？","acceptedAnswer":{"@type":"Answer","text":"第四章，11月7日更新后实装。三段独白分别出现在章节开头的观测站场景、中间的星图解读对话和结尾的遗物整理段落。"}},
+      {"@type":"Question","name":"《月下庭院》设定集里7个角色都算稀缺幼态方向吗？","acceptedAnswer":{"@type":"Answer","text":"7个角色中有4个在设定文本里给出了幼态外观与限定身份的因果说明，另外3个只是并列标注了两个标签，社区解包用户“解包小队长”在11月7日的整理帖中把这两组分开列出。"}},
+      {"@type":"Question","name":"绘星阁投稿专题的统计标签页还能看到吗？","acceptedAnswer":{"@type":"Answer","text":"专题页在11月5日截止后保留标签页入口，340份投稿仍可按“限定身份+幼态外观”标签筛选，但不再接受新投稿。"}},
+      {"@type":"Question","name":"《绒毛与星屑》完整版什么时候发布？","acceptedAnswer":{"@type":"Answer","text":"画集预览帖标注完整版预计12月发布，目前公开的12组预览图里，“苔原幼体”一组的创作草图已放出4张，背景文字说明未公开。"}},
+      {"@type":"Question","name":"怎么看一个条目的社区讨论是不是在讲角色本身？","acceptedAnswer":{"@type":"Answer","text":"看讨论里有没有引用原文句子或原图细节。例如观星者幼体的讨论中，有用户引用“星图是我唯一能读懂的遗物”这句话来讨论角色心理，这类讨论指向角色本身；只发“好看”“稀缺”的短评指向性弱。"}}
+    ]
+  }
+  </script>
+
+  <!-- 交互脚本 -->
+  <script>
+    (function(){
+      // 汉堡菜单
+      var hamburger = document.getElementById('hamburgerBtn');
+      var nav = document.getElementById('mainNav');
+      if (hamburger && nav) {
+        hamburger.addEventListener('click', function(){
+          var open = nav.classList.toggle('open');
+          hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+        // 点击导航项后收起
+        nav.addEventListener('click', function(e){
+          if (e.target.tagName === 'A' && nav.classList.contains('open')) {
+            nav.classList.remove('open');
+            hamburger.setAttribute('aria-expanded','false');
+          }
+        });
+        // 点击外部关闭
+        document.addEventListener('click', function(e){
+          if (nav.classList.contains('open') && !nav.contains(e.target) && e.target !== hamburger) {
+            nav.classList.remove('open');
+            hamburger.setAttribute('aria-expanded','false');
+          }
+        });
+        // Esc关闭
+        document.addEventListener('keydown', function(e){
+          if (e.key === 'Escape' && nav.classList.contains('open')) {
+            nav.classList.remove('open');
+            hamburger.setAttribute('aria-expanded','false');
+            hamburger.focus();
+          }
+        });
+      }
+
+      // 回到顶部
+      var backBtn = document.getElementById('backToTop');
+      window.addEventListener('scroll', function(){
+        if (window.scrollY > window.innerHeight) {
+          backBtn.classList.add('show');
+        } else {
+          backBtn.classList.remove('show');
+        }
+      });
+      backBtn.addEventListener('click', function(){
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // 左栏当前高亮
+      var sections = document.querySelectorAll('main section[id]');
+      var navLinks = document.querySelectorAll('.channel-nav a');
+      if (sections.length && navLinks.length) {
+        var observer = new IntersectionObserver(function(entries){
+          entries.forEach(function(entry){
+            if (entry.isIntersecting) {
+              navLinks.forEach(function(link){
+                link.classList.toggle('active', link.getAttribute('href') === '/#' + entry.target.id);
+              });
+            }
+          });
+        }, { rootMargin: '-30% 0px -60% 0px' });
+        sections.forEach(function(s){ observer.observe(s); });
+      }
+    })();
+  </script>
+</body>
+  </html>
