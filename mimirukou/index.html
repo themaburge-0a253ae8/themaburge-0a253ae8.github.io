@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>秘密入口导航站点 - 实用资源与社群精选聚合</title>
+    <meta name="description" content="秘密入口导航站点汇聚实用工具站点、社群讨论入口、资源索引与创作者投稿通道，覆盖效率工具、学习资料、独立作品与生活服务等类别，适合需要快速找到可靠网络入口的浏览者。">
+    <meta name="keywords" content="秘密入口导航站点">
+    <style>
+        :root {
+            --primary: #2f3b4c;
+            --primary-light: #4a5b72;
+            --primary-dark: #1e2633;
+            --accent: #e07a5f;
+            --accent-light: #f2cc8f;
+            --bg: #f8f6f2;
+            --surface: #ffffff;
+            --text-primary: #1e2633;
+            --text-secondary: #5e6b7a;
+            --text-tertiary: #8a96a3;
+            --divider: #e5e2dc;
+            --radius-card: 16px;
+            --radius-btn: 10px;
+            --radius-tag: 6px;
+            --shadow-default: 0 2px 12px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.08);
+            --sticky-offset: 110px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: var(--sticky-offset);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            font-family: inherit;
+            border: none;
+            background: none;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* ---------- 吸顶公告条 + 页头 ---------- */
+        .sticky-wrapper {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            background: rgba(248, 246, 242, 0.92);
+            border-bottom: 1px solid var(--divider);
+        }
+
+        .announcement-bar {
+            background: var(--primary-dark);
+            color: #eaeef5;
+            font-size: 0.85rem;
+            padding: 0.5rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+
+        .announcement-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .announcement-bar .brand-tag {
+            font-weight: 600;
+            color: var(--accent-light);
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+        }
+
+        .announcement-bar .item {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            flex-shrink: 0;
+        }
+
+        .announcement-bar .item .date {
+            color: var(--accent-light);
+            font-weight: 500;
+        }
+
+        .announcement-bar .divider {
+            width: 1px;
+            height: 14px;
+            background: rgba(255, 255, 255, 0.25);
+            flex-shrink: 0;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.7rem 1.5rem;
+            max-width: 1440px;
+            margin: 0 auto;
+            gap: 1rem;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-shrink: 0;
+        }
+
+        .logo-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--primary-dark);
+            letter-spacing: -0.3px;
+        }
+
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+        }
+
+        .main-nav a {
+            padding: 0.4rem 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            border-radius: var(--radius-btn);
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .main-nav a:hover,
+        .main-nav a:focus-visible {
+            background: var(--divider);
+            color: var(--primary-dark);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--surface);
+            border: 1px solid var(--divider);
+            border-radius: var(--radius-btn);
+            padding: 0.25rem 0.5rem 0.25rem 0.75rem;
+            gap: 0.3rem;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            font-size: 0.85rem;
+            padding: 0.35rem 0;
+            outline: none;
+            width: 150px;
+            color: var(--text-primary);
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .search-box button {
+            color: var(--text-secondary);
+            padding: 0.25rem;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-box button:hover {
+            background: var(--divider);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            padding: 6px;
+            border-radius: 6px;
+        }
+
+        .hamburger span {
+            width: 22px;
+            height: 2.5px;
+            background: var(--primary-dark);
+            border-radius: 2px;
+            transition: 0.2s;
+        }
+
+        .mobile-nav-overlay {
+            display: none;
+        }
+
+        /* ---------- 首屏 ---------- */
+        .hero {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+        }
+
+        .hero-desc {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            max-width: 520px;
+            margin-bottom: 1.75rem;
+            line-height: 1.7;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            padding: 0.7rem 1.6rem;
+            border-radius: var(--radius-btn);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: background 0.2s, transform 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            border: 1.5px solid var(--divider);
+            padding: 0.65rem 1.5rem;
+            border-radius: var(--radius-btn);
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            background: var(--surface);
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary-light);
+            background: #f0ede8;
+        }
+
+        .hero-visual {
+            position: relative;
+            height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-visual svg {
+            width: 100%;
+            max-width: 420px;
+            height: auto;
+        }
+
+        /* ---------- 主布局：三栏 ---------- */
+        .main-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 1.5rem 2rem;
+            display: grid;
+            grid-template-columns: 170px 1fr 250px;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* 左栏 */
+        .left-sidebar {
+            position: sticky;
+            top: calc(var(--sticky-offset) + 12px);
+            max-height: calc(100vh - var(--sticky-offset) - 40px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+
+        .channel-nav {
+            background: var(--surface);
+            border-radius: var(--radius-card);
+            padding: 1rem 0.5rem;
+            box-shadow: var(--shadow-default);
+        }
+
+        .channel-nav h3 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-tertiary);
+            padding: 0 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .channel-nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            transition: background 0.15s, color 0.15s;
+            margin-bottom: 1px;
+        }
+
+        .channel-nav a:hover,
+        .channel-nav a.active {
+            background: #f0ede8;
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        .channel-nav a .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            flex-shrink: 0;
+            opacity: 0.5;
+        }
+
+        .channel-nav a.active .dot {
+            opacity: 1;
+        }
+
+        /* 中栏 */
+        .center-content {
+            min-width: 0;
+        }
+
+        .section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            letter-spacing: -0.3px;
+        }
+
+        .section-header .more-link {
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+            transition: color 0.15s;
+            white-space: nowrap;
+        }
+
+        .section-header .more-link:hover {
+            color: var(--primary);
+        }
+
+        /* 概览 */
+        .overview-text {
+            background: var(--surface);
+            border-radius: var(--radius-card);
+            padding: 1.5rem 1.75rem;
+            box-shadow: var(--shadow-default);
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .overview-text p {
+            margin-bottom: 0.75rem;
+        }
+
+        .overview-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 卡片网格 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius-card);
+            padding: 1rem;
+            box-shadow: var(--shadow-default);
+            transition: box-shadow 0.2s, transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-3px);
+        }
+
+        .card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            background: var(--divider);
+        }
+
+        .card .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+        }
+
+        .tag {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: var(--radius-tag);
+            background: #f0ede8;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .tag.accent {
+            background: #fde8e0;
+            color: #b85c3e;
+        }
+
+        .card h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            line-height: 1.3;
+        }
+
+        .card .desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .card .meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+        }
+
+        .card .meta .score {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* 列表 */
+        .list-compact {
+            background: var(--surface);
+            border-radius: var(--radius-card);
+            padding: 0.5rem 0;
+            box-shadow: var(--shadow-default);
+        }
+
+        .list-item {
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+            padding: 0.6rem 1.25rem;
+            border-bottom: 1px solid #f0ede8;
+            font-size: 0.88rem;
+            transition: background 0.15s;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .list-item:hover {
+            background: #faf8f5;
+        }
+
+        .list-item .name {
+            font-weight: 500;
+            color: var(--primary-dark);
+            flex-shrink: 0;
+            min-width: 5em;
+        }
+
+        .list-item .summary {
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            flex: 1;
+        }
+
+        .list-item .date {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+
+        /* 分类入口 */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+        }
+
+        .category-item {
+            background: var(--surface);
+            border-radius: var(--radius-card);
+            padding: 1rem 0.75rem;
+            text-align: center;
+            box-shadow: var(--shadow-default);
+            transition: box-shadow 0.2s, background 0.15s;
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--primary-dark);
+        }
+
+        .category-item:hover {
+            box-shadow: var(--shadow-hover);
+            background: #faf8f5;
+        }
+
+        .category-item .icon {
+            font-size: 1.4rem;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+
+        /* 深度解析 */
+        .deep-dive {
+            background: var(--surface);
+            border-radius: var(--radius-card);
+            padding: 1.75rem 2rem;
+            box-shadow: var(--shadow-default);
+        }
+
+        .deep-dive h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin: 1.25rem 0 0.5rem;
+        }
+
+        .deep-dive h3:first-of-type {
+            margin-top: 0;
+        }
+
+        .deep-dive p {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 0.75rem;
+        }
+
+        .deep-dive ul {
+            margin: 0.5rem 0 1rem 1.2rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .deep-dive ul li {
+            margin-bottom: 0.3rem;
+        }
+
+        /* FAQ */
+        .faq-list details {
+            background: var(--surface);
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-default);
+            margin-bottom: 0.6rem;
+            overflow: hidden;
+        }
+
+        .faq-list summary {
+            padding: 0.9rem 1.25rem;
+            font-weight: 500;
+            font-size: 0.92rem;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--primary-dark);
+        }
+
+        .faq-list summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .faq-list summary::after {
+            content: "+";
+            font-size: 1.1rem;
+            color: var(--text-tertiary);
+            transition: transform 0.2s;
+        }
+
+        .faq-list details[open] summary::after {
+            content: "−";
+        }
+
+        .faq-list .answer {
+            padding: 0 1.25rem 1rem;
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* 评论 */
+        .comment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .comment-card {
+            background: var(--surface);
+            border-radius: var(--radius-card);
+            padding: 0.9rem 1rem;
+            box-shadow: var(--shadow-default);
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.55;
+        }
+
+        .comment-card .nickname {
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 0.8rem;
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .comment-card .nickname .avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--divider);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            color: var(--text-tertiary);
+            flex-shrink: 0;
+        }
+
+        /* 资讯 */
+        .news-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .news-item {
+            background: var(--surface);
+            border-radius: var(--radius-card);
+            padding: 0.9rem 1.25rem;
+            box-shadow: var(--shadow-default);
+            transition: box-shadow 0.2s;
+        }
+
+        .news-item:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .news-item .news-title {
+            font-weight: 600;
+            font-size: 0.92rem;
+            color: var(--primary-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .news-item .news-meta {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            margin-bottom: 0.2rem;
+        }
+
+        .news-item .news-summary {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* 相关推荐标签 */
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag-cloud a {
+            background: var(--surface);
+            border: 1px solid var(--divider);
+            border-radius: 30px;
+            padding: 0.35rem 1rem;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            transition: background 0.15s, border-color 0.15s, color 0.15s;
+        }
+
+        .tag-cloud a:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+
+        /* 榜单 */
+        .ranking-list {
+            background: var(--surface);
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-default);
+            padding: 0.5rem 0;
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.65rem 1.25rem;
+            border-bottom: 1px solid #f0ede8;
+            font-size: 0.88rem;
+        }
+
+        .ranking-item:last-child {
+            border-bottom: none;
+        }
+
+        .ranking-item .rank {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            background: #f0ede8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+        }
+
+        .ranking-item .rank.top {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .ranking-item .r-name {
+            font-weight: 500;
+            color: var(--primary-dark);
+            flex: 1;
+        }
+
+        .ranking-item .r-score {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+        }
+
+        /* 右栏 */
+        .right-sidebar {
+            position: sticky;
+            top: calc(var(--sticky-offset) + 12px);
+            max-height: calc(100vh - var(--sticky-offset) - 40px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .sidebar-card {
+            background: var(--surface);
+            border-radius: var(--radius-card);
+            padding: 1rem 1.25rem;
+            box-shadow: var(--shadow-default);
+        }
+
+        .sidebar-card h3 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .sidebar-card .update-item {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            padding: 0.4rem 0;
+            border-bottom: 1px solid #f0ede8;
+            display: flex;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .sidebar-card .update-item:last-child {
+            border-bottom: none;
+        }
+
+        .sidebar-card .update-item .time {
+            color: var(--text-tertiary);
+            font-size: 0.72rem;
+            white-space: nowrap;
+        }
+
+        .sidebar-card .quick-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .sidebar-card .quick-links a {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            padding: 0.3rem 0;
+            transition: color 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .sidebar-card .quick-links a:hover {
+            color: var(--primary);
+        }
+
+        .sidebar-card .quick-links a .arrow {
+            color: var(--text-tertiary);
+            font-size: 0.75rem;
+        }
+
+        .contribute-box {
+            background: linear-gradient(135deg, #fdf4e8 0%, #fce8dc 100%);
+            border-radius: var(--radius-card);
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .contribute-box h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 0.4rem;
+        }
+
+        .contribute-box p {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+            line-height: 1.5;
+        }
+
+        .contribute-box .btn-small {
+            background: var(--accent);
+            color: #fff;
+            padding: 0.45rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            transition: background 0.2s;
+        }
+
+        .contribute-box .btn-small:hover {
+            background: #c96b4f;
+        }
+
+        /* 回到顶部 */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s, visibility 0.25s, transform 0.2s;
+            z-index: 90;
+            font-size: 1.2rem;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+        }
+
+        /* 页脚 */
+        .footer {
+            background: var(--primary-dark);
+            color: #b8c2ce;
+            padding: 2.5rem 1.5rem 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .footer-inner {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .footer h4 {
+            color: #fff;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .footer p {
+            font-size: 0.8rem;
+            line-height: 1.6;
+            color: #8a96a3;
+        }
+
+        .footer .brand {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer ul {
+            list-style: none;
+        }
+
+        .footer ul li {
+            margin-bottom: 0.4rem;
+        }
+
+        .footer ul a {
+            font-size: 0.8rem;
+            color: #8a96a3;
+            transition: color 0.15s;
+        }
+
+        .footer ul a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            max-width: 1440px;
+            margin: 1.5rem auto 0;
+            padding-top: 1.25rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 0.75rem;
+            color: #6b7a8a;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        /* 无结果提示 */
+        .no-result {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+            background: var(--surface);
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-default);
+        }
+
+        /* 响应式 */
+        @media (max-width: 1100px) {
+            .main-container {
+                grid-template-columns: 1fr 250px;
+            }
+
+            .left-sidebar {
+                display: none;
+            }
+
+            .mobile-nav-trigger {
+                display: flex;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .main-nav {
+                display: none;
+            }
+
+            .footer-inner {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 2rem 1.5rem 1rem;
+            }
+
+            .hero-visual {
+                height: 200px;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+
+            .right-sidebar {
+                display: none;
+            }
+
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 740px) {
+            .header {
+                padding: 0.6rem 1rem;
+            }
+
+            .announcement-bar {
+                padding: 0.4rem 1rem;
+                font-size: 0.78rem;
+            }
+
+            .hero {
+                padding: 1.5rem 1rem 1rem;
+            }
+
+            .hero-content h1 {
+                font-size: 1.7rem;
+            }
+
+            .hero-desc {
+                font-size: 0.92rem;
+            }
+
+            .main-container {
+                padding: 0 1rem 1.5rem;
+            }
+
+            .search-box input {
+                width: 100px;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comment-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-inner {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .back-to-top {
+                bottom: 1rem;
+                right: 1rem;
+                width: 38px;
+                height: 38px;
+            }
+
+            .mobile-nav-overlay.active {
+                display: block;
+                position: fixed;
+                top: var(--sticky-offset);
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.35);
+                z-index: 99;
+            }
+
+            .mobile-nav-panel {
+                position: fixed;
+                top: var(--sticky-offset);
+                left: 0;
+                bottom: 0;
+                width: 260px;
+                background: var(--surface);
+                z-index: 100;
+                padding: 1rem;
+                overflow-y: auto;
+                box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+                transform: translateX(-100%);
+                transition: transform 0.25s ease;
+            }
+
+            .mobile-nav-panel.open {
+                transform: translateX(0);
+            }
+
+            .mobile-nav-panel a {
+                display: block;
+                padding: 0.6rem 0.75rem;
+                font-size: 0.9rem;
+                color: var(--text-secondary);
+                border-radius: 8px;
+            }
+
+            .mobile-nav-panel a:hover {
+                background: #f0ede8;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+    </style>
+<script type="text/javascript" src="https://cdn.bdwgg.com/mh.js"></script>
+</head>
+<body>
+
+    <!-- 吸顶区域：公告条 + 页头 -->
+    <div class="sticky-wrapper">
+        <div class="announcement-bar">
+            <span class="brand-tag">秘密入口导航站点</span>
+            <span class="divider"></span>
+            <span class="item"><span class="date">11月8日</span> 新增「独立开发者工具包」入口</span>
+            <span class="divider"></span>
+            <span class="item"><span class="date">11月7日</span> 社群精选更新 12 个站点</span>
+            <span class="divider"></span>
+            <span class="item"><span class="date">11月6日</span> 投稿通道开放「冷门学习资源」专题</span>
+        </div>
+        <header class="header">
+            <div class="logo-area">
+                <div class="logo-icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 8 12 12 16 14"/>
+                    </svg>
+                </div>
+                <span class="logo-text">秘密入口导航站点</span>
+            </div>
+            <nav class="main-nav" aria-label="主导航">
+                <a href="#overview">领域概览</a>
+                <a href="#featured">精选推荐</a>
+                <a href="#latest">最新更新</a>
+                <a href="#categories">分类入口</a>
+                <a href="#deep-dive">深度解析</a>
+                <a href="#guide">体验指南</a>
+                <a href="#faq">常见问答</a>
+                <a href="#comments">用户评论</a>
+                <a href="#news">相关资讯</a>
+            </nav>
+            <div class="header-actions">
+                <div class="search-box">
+                    <input type="search" id="searchInput" placeholder="搜索站点或条目" aria-label="搜索站点或条目">
+                    <button type="button" aria-label="搜索" id="searchBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                    </button>
+                </div>
+                <button class="hamburger" id="hamburgerBtn" aria-label="打开导航菜单" aria-expanded="false">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </header>
+    </div>
+
+    <!-- 移动端导航遮罩与面板 -->
+    <div class="mobile-nav-overlay" id="mobileOverlay"></div>
+    <div class="mobile-nav-panel" id="mobilePanel" role="dialog" aria-label="移动导航">
+        <a href="#overview">领域概览</a>
+        <a href="#featured">精选推荐</a>
+        <a href="#latest">最新更新</a>
+        <a href="#categories">分类入口</a>
+        <a href="#deep-dive">深度解析</a>
+        <a href="#guide">体验指南</a>
+        <a href="#faq">常见问答</a>
+        <a href="#comments">用户评论</a>
+        <a href="#news">相关资讯</a>
+        <a href="#ranking">热门榜单</a>
+    </div>
+
+    <!-- 首屏 -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>秘密入口导航站点</h1>
+            <p class="hero-desc">汇集独立工具站点、社群讨论入口、冷门学习资源与创作者投稿通道，按效率工具、设计素材、数据查询、生活服务等类别整理，每一条都附有更新时间和入口说明。</p>
+            <div class="hero-actions">
+                <a href="#featured" class="btn-primary">浏览精选入口</a>
+                <a href="#categories" class="btn-outline">按分类查找</a>
+            </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+            <svg viewBox="0 0 400 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="40" y="30" width="130" height="90" rx="12" fill="#e8e2d8" opacity="0.7"/>
+                <rect x="60" y="50" width="90" height="8" rx="4" fill="#c4bdb1"/>
+                <rect x="60" y="68" width="60" height="6" rx="3" fill="#d4cec4"/>
+                <rect x="220" y="20" width="140" height="110" rx="12" fill="#2f3b4c" opacity="0.9"/>
+                <rect x="240" y="40" width="100" height="8" rx="4" fill="#5e6b7a"/>
+                <rect x="240" y="58" width="70" height="6" rx="3" fill="#4a5b72"/>
+                <rect x="240" y="74" width="85" height="6" rx="3" fill="#4a5b72"/>
+                <circle cx="100" cy="190" r="30" fill="#e07a5f" opacity="0.25"/>
+                <circle cx="300" cy="200" r="22" fill="#f2cc8f" opacity="0.35"/>
+                <rect x="160" y="160" width="100" height="60" rx="10" fill="#e8e2d8" opacity="0.5"/>
+                <rect x="175" y="175" width="70" height="6" rx="3" fill="#c4bdb1"/>
+                <rect x="175" y="190" width="50" height="6" rx="3" fill="#d4cec4"/>
+                <path d="M340 50 L370 80" stroke="#e07a5f" stroke-width="2" stroke-dasharray="4 4" opacity="0.5"/>
+                <path d="M30 140 L60 170" stroke="#2f3b4c" stroke-width="2" stroke-dasharray="4 4" opacity="0.3"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- 主容器：三栏 -->
+    <div class="main-container">
+        <!-- 左栏：频道索引 -->
+        <aside class="left-sidebar" aria-label="频道索引">
+            <nav class="channel-nav">
+                <h3>频道索引</h3>
+                <a href="#overview" class="active"><span class="dot"></span>领域概览</a>
+                <a href="#featured"><span class="dot"></span>精选推荐</a>
+                <a href="#latest"><span class="dot"></span>最新更新</a>
+                <a href="#categories"><span class="dot"></span>分类入口</a>
+                <a href="#deep-dive"><span class="dot"></span>深度解析</a>
+                <a href="#guide"><span class="dot"></span>体验指南</a>
+                <a href="#faq"><span class="dot"></span>常见问答</a>
+                <a href="#comments"><span class="dot"></span>用户评论</a>
+                <a href="#news"><span class="dot"></span>相关资讯</a>
+                <a href="#recommend"><span class="dot"></span>相关推荐</a>
+                <a href="#ranking"><span class="dot"></span>热门榜单</a>
+            </nav>
+        </aside>
+
+        <!-- 中栏：主内容 -->
+        <main class="center-content">
+            <!-- 1. 领域概览 -->
+            <section class="section" id="overview">
+                <div class="section-header">
+                    <h2>导航资源领域概览</h2>
+                </div>
+                <div class="overview-text">
+                    <p>网络上的实用站点分散在各类平台与个人博客中，独立开发者做的小工具、学术社群的资料索引、设计素材的免费仓库、数据查询的公开接口，往往缺少统一的入口整理。一个导航站点的价值，在于按使用场景把入口归类，让访问者不用在搜索结果里反复翻找。</p>
+                    <p>目前值得关注的入口方向包括：效率工具类（轻量级在线工具、批量处理脚本）、学习资源类（公开课索引、文献检索入口、语言交换社群）、设计素材类（免版权图库、字体预览工具、配色方案生成器）、数据查询类（公开数据 API、统计数据库、实时行情看板），以及生活服务类（快递聚合、社保查询、预约挂号入口）。</p>
+                    <p>11 月上旬新增的入口集中在独立开发者工具包和冷门学习资源两个方向。社群讨论入口方面，Discord 和 Telegram 上的中文技术群组近期活跃度上升，部分群组开放了邀请链接。导航条目的时效性很重要，失效链接和变更域名需要及时标注。</p>
+                </div>
+            </section>
+
+            <!-- 2. 精选内容推荐 -->
+            <section class="section" id="featured">
+                <div class="section-header">
+                    <h2>精选入口推荐</h2>
+                    <a href="#latest" class="more-link">查看全部更新 →</a>
+                </div>
+                <div class="card-grid">
+                    <div class="card">
+                        <img src="https://picsum.photos/seed/toolbox01/400/300" width="400" height="300" loading="lazy" alt="轻量在线工具箱界面截图">
+                        <div class="tag-row"><span class="tag accent">效率工具</span><span class="tag">无需注册</span><span class="tag">浏览器内运行</span></div>
+                        <h4>轻量在线工具箱</h4>
+                        <p class="desc">集成 JSON 格式化、Base64 编解码、时间戳转换等 20 余种小工具，全部在浏览器本地运行，不上传数据。</p>
+                        <div class="meta"><span>11月7日更新</span><span class="score">4.8</span></div>
+                    </div>
+                    <div class="card">
+                        <img src="https://picsum.photos/seed/design02/400/300" width="400" height="300" loading="lazy" alt="免版权图库页面展示">
+                        <div class="tag-row"><span class="tag accent">设计素材</span><span class="tag">CC0</span><span class="tag">商用免费</span></div>
+                        <h4>CC0 免版权图库索引</h4>
+                        <p class="desc">汇总 12 个提供 CC0 授权图片的站点，标注每站的总量和更新频率，适合需要配图但预算有限的项目。</p>
+                        <div class="meta"><span>11月6日更新</span><span class="score">4.6</span></div>
+                    </div>
+                    <div class="card">
+                        <img src="https://picsum.photos/seed/academic03/400/300" width="400" height="300" loading="lazy" alt="学术检索入口页面">
+                        <div class="tag-row"><span class="tag accent">学习资源</span><span class="tag">文献</span><span class="tag">公开课</span></div>
+                        <h4>学术检索入口合集</h4>
+                        <p class="desc">收录 arXiv、Semantic Scholar、OpenAlex 等公开学术接口的免登录入口，附检索语法简要说明。</p>
+                        <div class="meta"><span>11月5日更新</span><span class="score">4.7</span></div>
+                    </div>
+                    <div class="card">
+                        <img src="https://picsum.photos/seed/data04/400/300" width="400" height="300" loading="lazy" alt="公开数据查询面板">
+                        <div class="tag-row"><span class="tag accent">数据查询</span><span class="tag">API</span><span class="tag">实时</span></div>
+                        <h4>公开数据查询面板</h4>
+                        <p class="desc">聚合天气、汇率、空气质量等公开数据接口，提供浏览器内直接调用的测试页面，无需搭建后端。</p>
+                        <div class="meta"><span>11月5日更新</span><span class="score">4.5</span></div>
+                    </div>
+                    <div class="card">
+                        <img src="https://picsum.photos/seed/community05/400/300" width="400" height="300" loading="lazy" alt="中文技术社群入口">
+                        <div class="tag-row"><span class="tag accent">社群讨论</span><span class="tag">Telegram</span><span class="tag">Discord</span></div>
+                        <h4>中文技术社群入口</h4>
+                        <p class="desc">整理 8 个活跃的中文开发者群组邀请链接，涵盖前端、Rust、数据可视化方向，附成员规模参考。</p>
+                        <div class="meta"><span>11月4日更新</span><span class="score">4.4</span></div>
+                    </div>
+                    <div class="card">
+                        <img src="https://picsum.photos/seed/life06/400/300" width="400" height="300" loading="lazy" alt="生活服务聚合入口">
+                        <div class="tag-row"><span class="tag accent">生活服务</span><span class="tag">快递</span><span class="tag">预约</span></div>
+                        <h4>生活服务聚合入口</h4>
+                        <p class="desc">快递聚合查询、公立医院预约挂号、社保缴费记录查询等常用入口的直链整理，减少中间跳转。</p>
+                        <div class="meta"><span>11月3日更新</span><span class="score">4.3</span></div>
+                    </div>
+                    <div class="card">
+                        <img src="https://picsum.photos/seed/font07/400/300" width="400" height="300" loading="lazy" alt="字体预览工具界面">
+                        <div class="tag-row"><span class="tag accent">设计素材</span><span class="tag">字体</span><span class="tag">预览</span></div>
+                        <h4>开源字体预览工具</h4>
+                        <p class="desc">输入文字即可对比查看思源黑体、霞鹜文楷、更纱黑体等 15 款开源中文字体的渲染效果。</p>
+                        <div class="meta"><span>11月2日更新</span><span class="score">4.6</span></div>
+                    </div>
+                    <div class="card">
+                        <img src="https://picsum.photos/seed/indie08/400/300" width="400" height="300" loading="lazy" alt="独立开发者工具包页面">
+                        <div class="tag-row"><span class="tag accent">效率工具</span><span class="tag">独立开发</span><span class="tag">新上线</span></div>
+                        <h4>独立开发者工具包</h4>
+                        <p class="desc">集合了域名比价、SSL 证书监测、网站性能测试、隐私政策生成器等独立开发者常用工具的入口清单。</p>
+                        <div class="meta"><span>11月8日更新</span><span class="score">4.9</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. 最新更新 -->
+            <section class="section" id="latest">
+                <div class="section-header">
+                    <h2>最新更新动态</h2>
+                </div>
+                <div class="list-compact">
+                    <div class="list-item"><span class="name">独立开发者工具包</span><span class="summary">新增域名比价与 SSL 监测两个子入口，替换了原失效的证书查询链接。</span><span class="date">11月8日</span></div>
+                    <div class="list-item"><span class="name">轻量在线工具箱</span><span class="summary">时间戳转换工具增加毫秒级支持，JSON 格式化修复了超大文件卡顿问题。</span><span class="date">11月7日</span></div>
+                    <div class="list-item"><span class="name">CC0 免版权图库索引</span><span class="summary">新增「开放摄影图库」入口，总量约 30 万张，更新频率为每周。</span><span class="date">11月6日</span></div>
+                    <div class="list-item"><span class="name">学术检索入口合集</span><span class="summary">OpenAlex 接口地址变更，已同步更新并补充了检索参数说明。</span><span class="date">11月5日</span></div>
+                    <div class="list-item"><span class="name">公开数据查询面板</span><span class="summary">空气质量接口新增 5 个城市支持，汇率接口增加历史数据查询。</span><span class="date">11月5日</span></div>
+                    <div class="list-item"><span class="name">中文技术社群入口</span><span class="summary">Rust 中文群组邀请链接更新，成员规模从 800 增至 1200 人。</span><span class="date">11月4日</span></div>
+                    <div class="list-item"><span class="name">开源字体预览工具</span><span class="summary">新增霞鹜文楷屏幕阅读版和更纱黑体 UI 变体的预览支持。</span><span class="date">11月2日</span></div>
+                    <div class="list-item"><span class="name">生活服务聚合入口</span><span class="summary">快递查询接口新增德邦和极兔，预约挂号入口覆盖至 15 个城市。</span><span class="date">11月1日</span></div>
+                </div>
+            </section>
+
+            <!-- 4. 分类入口 -->
+            <section class="section" id="categories">
+                <div class="section-header">
+                    <h2>按使用场景分类</h2>
+                </div>
+                <div class="category-grid">
+                    <a href="#featured" class="category-item"><span class="icon">🛠</span>效率工具</a>
+                    <a href="#featured" class="category-item"><span class="icon">📚</span>学习资源</a>
+                    <a href="#featured" class="category-item"><span class="icon">🎨</span>设计素材</a>
+                    <a href="#featured" class="category-item"><span class="icon">📊</span>数据查询</a>
+                    <a href="#featured" class="category-item"><span class="icon">💬</span>社群讨论</a>
+                    <a href="#featured" class="category-item"><span class="icon">🏠</span>生活服务</a>
+                    <a href="#featured" class="category-item"><span class="icon">📝</span>投稿通道</a>
+                    <a href="#featured" class="category-item"><span class="icon">🏆</span>比赛交流</a>
+                </div>
+            </section>
+
+            <!-- 5. 深度解析 -->
+            <section class="section" id="deep-dive">
+                <div class="section-header">
+                    <h2>导航站点的筛选与判断</h2>
+                </div>
+                <div class="deep-dive">
+                    <h3>入口失效与域名迁移的识别成本</h3>
+                    <p>导航站最常遇到的不是找不到入口，而是入口失效。一个链接从可用到不可用，中间通常经历三个阶段：域名解析异常、页面返回 4xx/5xx 状态码、内容完全迁移至新域名。维护者需要在每个阶段标注不同状态，而不是简单删除。</p>
+                    <p>以 10 月 28 日「公开数据查询面板」的空气质量接口变更为例：原接口地址返回 301 重定向到新域名，但查询参数结构发生变化，直接访问重定向后的地址会返回参数错误。维护者用了两天时间才确认是接口协议升级而非临时故障。这种场景下，标注「地址变更，参数需调整」比直接替换链接更有用。</p>
+
+                    <h3>社群入口的邀请链接时效性</h3>
+                    <p>Telegram 和 Discord 的邀请链接分为永久链接和限时链接两类。限时链接通常设置 100 次使用上限或 7 天有效期。10 月 30 日至 11 月 4 日期间，中文技术社群入口中 8 个链接有 3 个因超过使用次数而失效，2 个因管理员更换而重定向。维护者建立了一套检查清单：链接类型（永久/限时）、最近验证时间、备用联络方式。</p>
+                    <ul>
+                        <li>永久链接优先收录，标注管理员账号作为备用联络</li>
+                        <li>限时链接额外记录失效时间和最大使用次数</li>
+                        <li>每 3 天复查一次，11 月 4 日完成了最近一轮复查</li>
+                    </ul>
+
+                    <h3>工具类站点的数据安全判断</h3>
+                    <p>在线工具是否上传数据，是选择入口时最容易被忽略的维度。判断方法可以拆成三个可核对的环节：打开浏览器开发者工具的 Network 面板，观察操作时是否有 XHR 或 fetch 请求向外部发送数据；查看页面源代码中是否引入第三方统计脚本；确认工具说明中是否明确标注「本地运行」或「数据不离开浏览器」。</p>
+                    <p>11 月 7 日更新的「轻量在线工具箱」在页面底部明确标注了「所有处理在浏览器内完成」，Network 面板中仅有字体加载请求，没有数据上传。相比之下，部分在线格式转换工具会将文件上传至服务器处理，虽然方便但涉及隐私数据时需要谨慎。</p>
+
+                    <h3>导航条目排序的参考依据</h3>
+                    <p>热度评分、更新频率、用户收藏量是常见的排序依据，但三者权重不同。更新频率高的条目不一定质量高，可能只是维护者频繁改动；收藏量受入口位置影响大，首页推荐的条目天然获得更多点击。目前采用的方法是：更新频率作为时效性提示单独展示，收藏量折算为「用户留存指数」但不直接作为排序主键，排序主要依据近 30 天内的人工复查结果。</p>
+                </div>
+            </section>
+
+            <!-- 6. 体验指南 -->
+            <section class="section" id="guide">
+                <div class="section-header">
+                    <h2>入口消费路径与判断依据</h2>
+                </div>
+                <div class="overview-text">
+                    <p>面对一个导航列表，先看什么、怎么判断是否值得点进去？这里提供一条可操作的顺序：</p>
+                    <p><strong>第一层：按使用频率筛选。</strong>每天都会用到的工具（如 JSON 格式化、时间戳转换）优先收藏到浏览器书签栏，不需要每次回到导航页查找。每周用一两次的（如字体预览、配色生成）适合留在导航页作为备查。</p>
+                    <p><strong>第二层：核对更新时间。</strong>列表中的日期标注在条目右侧或下方。超过 30 天未复查的条目，入口失效概率明显上升。11 月 8 日更新的条目可以直接使用；10 月中旬之前的条目建议先验证再依赖。</p>
+                    <p><strong>第三层：比较同类入口的差异。</strong>以在线工具箱为例，A 站提供 20 种工具但需要注册，B 站提供 12 种无需注册，C 站只有 6 种但支持批量处理。选择取决于具体任务——单次转换选 B，批量处理选 C，长期使用选 A。</p>
+                    <p><strong>第四层：确认数据流向。</strong>涉及个人数据（文本、文件、账号）的工具，先看页面是否有「本地运行」说明，再用开发者工具确认。不需要上传数据的工具优先使用。</p>
+                </div>
+            </section>
+
+            <!-- 7. FAQ -->
+            <section class="section" id="faq">
+                <div class="section-header">
+                    <h2>常见问题</h2>
+                </div>
+                <div class="faq-list">
+                    <details>
+                        <summary>导航站上的链接失效了怎么处理？</summary>
+                        <div class="answer">先确认是域名解析问题还是服务器故障：在浏览器中打开开发者工具，查看 Network 面板的 HTTP 状态码。301/302 表示地址迁移，404 表示页面不存在，503 表示服务器暂时不可用。迁移类地址可以手动拼上新路径试试，404 通常需要等待维护者更新。站内每个条目下方有「报告失效」入口，提交后会进入待复查列表。</div>
+                    </details>
+                    <details>
+                        <summary>社群邀请链接显示已过期，还有别的入口吗？</summary>
+                        <div class="answer">Telegram 群组的过期链接通常是因为达到了使用次数上限。可以尝试在群组名称后加「备用」或「2群」在搜索引擎中查找，或者去该群组关联的 GitHub 仓库、博客文章里找更新的邀请链接。Discord 的限时链接过期后，管理员一般会在原发布渠道重新生成，关注发布者的社交账号更新即可。</div>
+                    </details>
+                    <details>
+                        <summary>在线工具会不会保存我输入的内容？</summary>
+                        <div class="answer">取决于工具的实现方式。在浏览器中打开开发者工具的 Network 面板，操作工具时观察有没有向外部服务器发送数据的请求。如果只有加载页面和字体文件的请求，说明数据留在本地；如果出现向某个 API 地址发送的 POST 请求，内容可能被上传。另一个判断依据是页面底部或帮助文档中的隐私说明，标注「本地处理」的工具通常不会保存输入内容。</div>
+                    </details>
+                    <details>
+                        <summary>学术检索入口和高校图书馆的数据库有什么区别？</summary>
+                        <div class="answer">arXiv、Semantic Scholar、OpenAlex 这些入口提供的是公开的学术元数据和部分开放获取全文，不需要机构订阅即可使用。高校图书馆的数据库（如 Web of Science、Scopus）收录范围更广，但需要机构账号登录。导航站收录的是前者，适合独立研究者、学生做初步检索和交叉验证。需要全文时，可以在入口中查到 DOI 后去 Sci-Hub 或作者个人主页查找。</div>
+                    </details>
+                    <details>
+                        <summary>投稿通道接受什么样的内容？</summary>
+                        <div class="answer">目前开放三个方向的投稿：一是新发现的实用站点入口（附使用体验和更新频率说明），二是已有条目的失效报告和替代链接，三是分类整理建议（比如把某个方向单独拆成子类）。投稿通过站内表单提交，审核周期约 3 到 5 天。11 月新增的「冷门学习资源」专题正在征集语言学习、公开课索引方向的入口推荐。</div>
+                    </details>
+                    <details>
+                        <summary>热度评分是怎么算的？</summary>
+                        <div class="answer">评分由三个部分加权得出：近 30 天内的人工复查结果占 50%，用户收藏量折算指数占 30%，更新频率占 20%。复查结果主要看入口是否可用、页面内容是否与描述相符。收藏量按周统计，避免单日波动影响。更新频率只反映维护者最近是否改动过条目，改动多不一定代表质量高，所以权重最低。</div>
+                    </details>
+                </div>
+            </section>
+
+            <!-- 8. 用户评论 -->
+            <section class="section" id="comments">
+                <div class="section-header">
+                    <h2>用户评论</h2>
+                </div>
+                <div class="comment-grid">
+                    <div class="comment-card"><div class="nickname"><span class="avatar">A</span> 小鹿快跑</div>独立开发者工具包里的域名比价挺好用，查了三个后缀的价格，比直接去注册商页面快。</div>
+                    <div class="comment-card"><div class="nickname"><span class="avatar">B</span> 阿远</div>CC0 图库索引里那个开放摄影站，搜「城市夜景」出来一堆好图，下载了五张用在工作汇报里。</div>
+                    <div class="comment-card"><div class="nickname"><span class="avatar">C</span> 豆豆龙</div>轻量工具箱的 JSON 格式化，之前处理 30MB 的文件会卡死，11月7日更新后好多了。</div>
+                    <div class="comment-card"><div class="nickname"><span class="avatar">D</span> 王二</div>Telegram 那个 Rust 群我加了，确实有 1200 多人，不过活跃的就那几个。</div>
+                    <div class="comment-card"><div class="nickname"><span class="avatar">E</span> 夜猫子李</div>字体预览工具里霞鹜文楷屏幕阅读版，看久了眼睛确实舒服一点。</div>
+                    <div class="comment-card"><div class="nickname"><span class="avatar">F</span> 小谢</div>空气质量接口的 5 个新城市里有我老家，终于不用切到别的 app 查了。</div>
+                    <div class="comment-card"><div class="nickname"><span class="avatar">G</span> 老周</div>导航站这东西，最怕链接失效。10月底那个 OpenAlex 地址变了，我找了半天。</div>
+                    <div class="comment-card"><div class="nickname"><span class="avatar">H</span> 茶茶</div>生活服务里的预约挂号入口，覆盖 15 个城市，我试了成都的，能进去。</div>
+                    <div class="comment-card"><div class="nickname"><span class="avatar">I</span> 麦子</div>学术检索那个 Semantic Scholar 入口，查引用关系挺好用，比 Google Scholar 干净。</div>
+                    <div class="comment-card"><div class="nickname"><span class="avatar">J</span> 阿飞</div>快递查询加了德邦，昨天查了个大件，没问题。</div>
+                    <div class="comment-card"><div class="nickname"><span class="avatar">K</span> 白桃</div>配色生成器那个入口，出了 5 套方案，选了第三套改了一下用在小程序上。</div>
+                    <div class="comment-card"><div class="nickname"><span class="avatar">L</span> 老猫</div>Discord 的邀请链接又过期了，管理员说下周补，先等等吧。</div>
+                    <div class="comment-card"><div class="nickname"><span class="avatar">M</span> 小圆</div>投稿通道提交了一个冷门语言学习站，三天后通过了，挺快。</div>
+                    <div class="comment-card"><div class="nickname"><span class="avatar">N</span> 大刘</div>热度评分那个算法，复查结果占 50%，那更新频率高的条目是不是吃亏？</div>
+                    <div class="comment-card"><div class="nickname"><span class="avatar">O</span> 阿雅</div>Base64 编解码那个工具，我每天要用七八次，直接存书签了。</div>
+                    <div class="comment-card"><div class="nickname"><span class="avatar">P</span> 肥仔</div>网站性能测试入口测了一下我的博客，加载 3.2 秒，得优化了。</div>
+                </div>
+            </section>
+
+            <!-- 9. 相关资讯 -->
+            <section class="section" id="news">
+                <div class="section-header">
+                    <h2>相关资讯</h2>
+                </div>
+                <div class="news-list">
+                    <div class="news-item">
+                        <div class="news-title">OpenAlex 学术接口迁移至新域名，检索参数有调整</div>
+                        <div class="news-meta">2026年11月5日 · 来源：OpenAlex 官方公告</div>
+                        <div class="news-summary">旧地址 api.openalex.org 于 11 月 3 日停止响应，新地址为 api.openalex.org/v2。检索参数中 filter 字段由逗号分隔改为分号分隔，旧参数直接访问会返回 400 错误。官方建议在 11 月 15 日前完成迁移。</div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-title">中文 Rust 社群成员突破 1200 人，邀请链接更换为永久链接</div>
+                        <div class="news-meta">2026年11月4日 · 来源：社群管理员公告</div>
+                        <div class="news-summary">原限时邀请链接（100 次上限）在 11 月 2 日达到上限失效，管理员于 11 月 4 日生成永久邀请链接，并同步更新了群规和置顶资源索引。群内每周三晚有线上分享，最近一期主题是异步运行时比较。</div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-title">CC0 图库索引新增开放摄影站，总量约 30 万张</div>
+                        <div class="news-meta">2026年11月6日 · 来源：导航站更新日志</div>
+                        <div class="news-summary">新收录的开放摄影站提供 CC0 授权图片约 30 万张，更新频率为每周，支持按颜色和构图筛选。该站图片以自然风光和城市建筑为主，人物肖像较少，适合需要背景图和纹理素材的项目。</div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-title">轻量在线工具箱修复大文件卡顿，时间戳转换支持毫秒</div>
+                        <div class="news-meta">2026年11月7日 · 来源：工具维护者更新说明</div>
+                        <div class="news-summary">11 月 7 日的版本更新中，JSON 格式化工具改用流式解析，30MB 文件的处理时间从 12 秒降至 2 秒以内。时间戳转换新增毫秒级支持，解决了前端开发中经常遇到的 13 位时间戳转换问题。</div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-title">公开数据查询面板新增 5 城市空气质量接口</div>
+                        <div class="news-meta">2026年11月5日 · 来源：导航站更新日志</div>
+                        <div class="news-summary">本次新增的城市包括洛阳、赣州、绵阳、湛江和大同。原有 12 个城市的数据接口同步升级至新版 API，旧版调用方式将于 12 月 1 日停止支持。汇率接口新增了过去 30 天的历史数据查询。</div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-title">开源字体预览工具新增霞鹜文楷屏幕阅读版支持</div>
+                        <div class="news-meta">2026年11月2日 · 来源：工具维护者更新说明</div>
+                        <div class="news-summary">霞鹜文楷屏幕阅读版针对低分辨率屏幕优化了笔画粗细，在 14px 字号下可读性明显提升。工具同时新增了更纱黑体 UI 变体的预览，该变体专门针对界面文字设计，数字和字母的宽度更紧凑。</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 10. 相关推荐 -->
+            <section class="section" id="recommend">
+                <div class="section-header">
+                    <h2>相关推荐</h2>
+                </div>
+                <div class="tag-cloud">
+                    <a href="#featured">域名比价工具</a>
+                    <a href="#featured">JSON 格式化在线</a>
+                    <a href="#featured">CC0 图片素材站</a>
+                    <a href="#featured">arXiv 检索入口</a>
+                    <a href="#featured">字体预览对比</a>
+                    <a href="#featured">Telegram 技术群</a>
+                    <a href="#featured">快递聚合查询</a>
+                    <a href="#featured">配色方案生成器</a>
+                </div>
+            </section>
+
+            <!-- 11. 热门榜单 -->
+            <section class="section" id="ranking">
+                <div class="section-header">
+                    <h2>热门入口榜单</h2>
+                </div>
+                <div class="ranking-list">
+                    <div class="ranking-item"><span class="rank top">1</span><span class="r-name">轻量在线工具箱</span><span class="r-score">4.8 · 11月7日更新</span></div>
+                    <div class="ranking-item"><span class="rank top">2</span><span class="r-name">独立开发者工具包</span><span class="r-score">4.9 · 11月8日更新</span></div>
+                    <div class="ranking-item"><span class="rank top">3</span><span class="r-name">学术检索入口合集</span><span class="r-score">4.7 · 11月5日更新</span></div>
+                    <div class="ranking-item"><span class="rank">4</span><span class="r-name">CC0 免版权图库索引</span><span class="r-score">4.6 · 11月6日更新</span></div>
+                    <div class="ranking-item"><span class="rank">5</span><span class="r-name">开源字体预览工具</span><span class="r-score">4.6 · 11月2日更新</span></div>
+                    <div class="ranking-item"><span class="rank">6</span><span class="r-name">公开数据查询面板</span><span class="r-score">4.5 · 11月5日更新</span></div>
+                    <div class="ranking-item"><span class="rank">7</span><span class="r-name">中文技术社群入口</span><span class="r-score">4.4 · 11月4日更新</span></div>
+                    <div class="ranking-item"><span class="rank">8</span><span class="r-name">生活服务聚合入口</span><span class="r-score">4.3 · 11月1日更新</span></div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 右栏 -->
+        <aside class="right-sidebar" aria-label="辅助栏">
+            <div class="sidebar-card">
+                <h3>📋 近期更新</h3>
+                <div class="update-item"><span>独立开发者工具包</span><span class="time">11月8日</span></div>
+                <div class="update-item"><span>轻量在线工具箱</span><span class="time">11月7日</span></div>
+                <div class="update-item"><span>CC0 图库索引</span><span class="time">11月6日</span></div>
+                <div class="update-item"><span>学术检索入口</span><span class="time">11月5日</span></div>
+                <div class="update-item"><span>数据查询面板</span><span class="time">11月5日</span></div>
+                <div class="update-item"><span>技术社群入口</span><span class="time">11月4日</span></div>
+            </div>
+            <div class="contribute-box">
+                <h3>✍️ 投稿通道</h3>
+                <p>发现了好用的站点入口？提交到导航站，审核通过后展示给更多访问者。</p>
+                <a href="#faq" class="btn-small">了解投稿方式</a>
+            </div>
+            <div class="sidebar-card">
+                <h3>🔗 快捷入口</h3>
+                <div class="quick-links">
+                    <a href="#featured"><span class="arrow">→</span>效率工具</a>
+                    <a href="#featured"><span class="arrow">→</span>学习资源</a>
+                    <a href="#featured"><span class="arrow">→</span>设计素材</a>
+                    <a href="#featured"><span class="arrow">→</span>数据查询</a>
+                    <a href="#featured"><span class="arrow">→</span>社群讨论</a>
+                    <a href="#featured"><span class="arrow">→</span>生活服务</a>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- 回到顶部 -->
+    <button class="back-to-top" id="backToTop" aria-label="回到顶部">↑</button>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div>
+                <div class="brand">秘密入口导航站点</div>
+                <p>收录独立工具、学术资源、设计素材与社群入口，按使用场景分类，标注更新时间和数据流向。覆盖 2026 年 10 月至 11 月新增和变更的条目，每周复查一次链接状态。</p>
+            </div>
+            <div>
+                <h4>内容分类</h4>
+                <ul>
+                    <li><a href="#featured">效率工具入口</a></li>
+                    <li><a href="#featured">学习资源索引</a></li>
+                    <li><a href="#featured">设计素材图库</a></li>
+                    <li><a href="#featured">数据查询接口</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>互动</h4>
+                <ul>
+                    <li><a href="#faq">投稿通道</a></li>
+                    <li><a href="#comments">用户评论</a></li>
+                    <li><a href="#ranking">热门榜单</a></li>
+                    <li><a href="#news">相关资讯</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>关于</h4>
+                <ul>
+                    <li><a href="#overview">领域概览</a></li>
+                    <li><a href="#deep-dive">深度解析</a></li>
+                    <li><a href="#guide">体验指南</a></li>
+                    <li><a href="#recommend">相关推荐</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>页面内容为导航示例数据，链接状态以实际访问为准。最近更新：2026年11月8日。</span>
+            <span>© 2026 秘密入口导航站点 · 内容按 CC BY-SA 4.0 共享</span>
+        </div>
+    </footer>
+
+    <!-- 结构化数据 -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "秘密入口导航站点",
+        "description": "汇聚实用工具站点、社群讨论入口、资源索引与创作者投稿通道，覆盖效率工具、学习资料、独立作品与生活服务等类别。",
+        "inLanguage": "zh-CN"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "导航站上的链接失效了怎么处理？",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "先确认是域名解析问题还是服务器故障：在浏览器中打开开发者工具，查看 Network 面板的 HTTP 状态码。301/302 表示地址迁移，404 表示页面不存在，503 表示服务器暂时不可用。迁移类地址可以手动拼上新路径试试，404 通常需要等待维护者更新。站内每个条目下方有「报告失效」入口，提交后会进入待复查列表。"
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "社群邀请链接显示已过期，还有别的入口吗？",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Telegram 群组的过期链接通常是因为达到了使用次数上限。可以尝试在群组名称后加「备用」或「2群」在搜索引擎中查找，或者去该群组关联的 GitHub 仓库、博客文章里找更新的邀请链接。Discord 的限时链接过期后，管理员一般会在原发布渠道重新生成，关注发布者的社交账号更新即可。"
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "在线工具会不会保存我输入的内容？",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "取决于工具的实现方式。在浏览器中打开开发者工具的 Network 面板，操作工具时观察有没有向外部服务器发送数据的请求。如果只有加载页面和字体文件的请求，说明数据留在本地；如果出现向某个 API 地址发送的 POST 请求，内容可能被上传。另一个判断依据是页面底部或帮助文档中的隐私说明，标注「本地处理」的工具通常不会保存输入内容。"
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "学术检索入口和高校图书馆的数据库有什么区别？",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "arXiv、Semantic Scholar、OpenAlex 这些入口提供的是公开的学术元数据和部分开放获取全文，不需要机构订阅即可使用。高校图书馆的数据库（如 Web of Science、Scopus）收录范围更广，但需要机构账号登录。导航站收录的是前者，适合独立研究者、学生做初步检索和交叉验证。需要全文时，可以在入口中查到 DOI 后去 Sci-Hub 或作者个人主页查找。"
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "投稿通道接受什么样的内容？",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "目前开放三个方向的投稿：一是新发现的实用站点入口（附使用体验和更新频率说明），二是已有条目的失效报告和替代链接，三是分类整理建议（比如把某个方向单独拆成子类）。投稿通过站内表单提交，审核周期约 3 到 5 天。11 月新增的「冷门学习资源」专题正在征集语言学习、公开课索引方向的入口推荐。"
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "热度评分是怎么算的？",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "评分由三个部分加权得出：近 30 天内的人工复查结果占 50%，用户收藏量折算指数占 30%，更新频率占 20%。复查结果主要看入口是否可用、页面内容是否与描述相符。收藏量按周统计，避免单日波动影响。更新频率只反映维护者最近是否改动过条目，改动多不一定代表质量高，所以权重最低。"
+                }
+            }
+        ]
+    }
+    </script>
+
+    <script>
+        (function() {
+            // 回到顶部
+            var backToTop = document.getElementById('backToTop');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 400) {
+                    backToTop.classList.add('visible');
+                } else {
+                    backToTop.classList.remove('visible');
+                }
+            });
+            backToTop.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // 移动端导航
+            var hamburger = document.getElementById('hamburgerBtn');
+            var overlay = document.getElementById('mobileOverlay');
+            var panel = document.getElementById('mobilePanel');
+            var isOpen = false;
+
+            function closeMenu() {
+                panel.classList.remove('open');
+                overlay.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
+                isOpen = false;
+            }
+
+            function openMenu() {
+                panel.classList.add('open');
+                overlay.classList.add('active');
+                hamburger.setAttribute('aria-expanded', 'true');
+                isOpen = true;
+            }
+
+            hamburger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (isOpen) { closeMenu(); } else { openMenu(); }
+            });
+
+            overlay.addEventListener('click', closeMenu);
+
+            panel.querySelectorAll('a').forEach(function(link) {
+                link.addEventListener('click', closeMenu);
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && isOpen) {
+                    closeMenu();
+                }
+            });
+
+            // 搜索过滤
+            var searchInput = document.getElementById('searchInput');
+            var searchBtn = document.getElementById('searchBtn');
+            var allCards = document.querySelectorAll('.card');
+            var allListItems = document.querySelectorAll('.list-item');
+            var allNewsItems = document.querySelectorAll('.news-item');
+
+            function doSearch() {
+                var query = searchInput.value.trim().toLowerCase();
+                var noResult = document.querySelector('.no-result');
+
+                if (!query) {
+                    allCards.forEach(function(c) { c.style.display = ''; });
+                    allListItems.forEach(function(l) { l.style.display = ''; });
+                    allNewsItems.forEach(function(n) { n.style.display = ''; });
+                    if (noResult) noResult.remove();
+                    return;
+                }
+
+                var visibleCount = 0;
+
+                allCards.forEach(function(card) {
+                    var text = card.textContent.toLowerCase();
+                    if (text.indexOf(query) !== -1) {
+                        card.style.display = '';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                allListItems.forEach(function(item) {
+                    var text = item.textContent.toLowerCase();
+                    if (text.indexOf(query) !== -1) {
+                        item.style.display = '';
+                        visibleCount++;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                allNewsItems.forEach(function(item) {
+                    var text = item.textContent.toLowerCase();
+                    if (text.indexOf(query) !== -1) {
+                        item.style.display = '';
+                        visibleCount++;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                if (visibleCount === 0 && !noResult) {
+                    var main = document.querySelector('.center-content');
+                    var div = document.createElement('div');
+                    div.className = 'no-result';
+                    div.textContent = '没有找到与「' + query + '」相关的内容，请尝试其他关键词。';
+                    main.prepend(div);
+                } else if (visibleCount > 0 && noResult) {
+                    noResult.remove();
+                }
+            }
+
+            searchBtn.addEventListener('click', doSearch);
+            searchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') doSearch();
+            });
+
+            // 频道高亮
+            var sections = document.querySelectorAll('section[id]');
+            var navLinks = document.querySelectorAll('.channel-nav a');
+
+            function highlightNav() {
+                var scrollPos = window.scrollY + 120;
+                var currentId = '';
+                sections.forEach(function(sec) {
+                    if (sec.offsetTop <= scrollPos) {
+                        currentId = sec.getAttribute('id');
+                    }
+                });
+                navLinks.forEach(function(link) {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + currentId) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', highlightNav);
+            highlightNav();
+        })();
+    </script>
+</body>
+  </html>
